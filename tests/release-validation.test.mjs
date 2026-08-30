@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import { requiredProjectFiles, validateArchivePath, validateProjectAssetMatrix } from "../src/release-validation.mjs";
+import { requiredProjectFiles, validateArchiveEntryNames, validateArchivePath, validateProjectAssetMatrix } from "../src/release-validation.mjs";
 
 const commonProject = { id: "editor-ruler", surfaces: { extension: false, terminal: false } };
 const extensionProject = { id: "kokey", surfaces: { extension: true, terminal: false } };
@@ -24,6 +24,18 @@ test("rejects archive traversal and Windows-equivalent unsafe paths", () => {
   }
   assert.equal(validateArchivePath("icons/icon-32.png"), "icons/icon-32.png");
   assert.equal(validateArchivePath("icons\\icon-32.png"), "icons/icon-32.png");
+});
+
+test("rejects case-fold and slash-normalized archive entry collisions", () => {
+  for (const names of [
+    ["icons/Icon-32.png", "icons/icon-32.png"],
+    ["icons\\icon-32.png", "icons/icon-32.png"],
+  ]) {
+    assert.throws(() => validateArchiveEntryNames(names), /unsafe archive path collision/i);
+  }
+
+  assert.doesNotThrow(() => validateArchiveEntryNames(["icons/icon-16.png", "icons/icon-32.png"]));
+  assert.doesNotThrow(() => validateArchiveEntryNames(["icons\\icon-16.png", "glyph-color.svg"]));
 });
 
 test("requires every common, extension, and terminal asset class", async () => {
