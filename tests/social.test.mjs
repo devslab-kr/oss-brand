@@ -18,6 +18,9 @@ test("social SVGs use the approved OG and README canvases", async () => {
   assert.match(og, /Open source by DevsLab/);
   assert.match(og, /<g[^>]*stroke="#0E7490"/, "social marks preserve the approved OSS cyan stroke");
   assert.doesNotMatch(og, /linearGradient|radialGradient/);
+  assert.doesNotMatch(og, /<text\b|font-family/i, "social typography is outlined at build time");
+  assert.doesNotMatch(readme, /<text\b|font-family/i, "README typography is outlined at build time");
+  assert.equal(buildSocialSvg(project, { kind: "og" }), og, "social SVG serialization is repeatable");
 });
 
 test("social generator rejects non-canonical project identities", () => {

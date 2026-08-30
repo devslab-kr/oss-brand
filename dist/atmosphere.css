@@ -1,6 +1,8 @@
+/* Markup: <section class="hero-atmosphere" data-atmosphere="oss"><div class="hero-atmosphere__glow" aria-hidden="true"></div><div class="hero-atmosphere__content">…</div></section>. The glow is decorative; content remains above it. */
 .hero-atmosphere { position: relative; isolation: isolate; }
-.hero-atmosphere__glow { position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 46% 68% at 86% 22%, rgb(6 182 212 / .11), transparent 72%); }
-[data-atmosphere="oss"] .hero-atmosphere__glow { background: radial-gradient(ellipse 38% 58% at 86% 22%, rgb(6 182 212 / .11), transparent 72%); }
-[data-theme="dark"] .hero-atmosphere__glow { background-color: transparent; background-image: radial-gradient(ellipse 46% 68% at 86% 22%, rgb(34 211 238 / .10), transparent 72%); }
-[data-atmosphere="project"] .hero-atmosphere__glow::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 30% 42% at 86% 22%, var(--project-accent, #06B6D4) 0%, transparent 72%); opacity: .08; pointer-events: none; }
-@media (forced-colors: active), print { .hero-atmosphere__glow, .hero-atmosphere__glow::after { display: none; } }
+.hero-atmosphere > [aria-hidden="true"].hero-atmosphere__glow { position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 46% 68% at 86% 22%, rgb(6 182 212 / .11), transparent 72%); }
+.hero-atmosphere > :not([aria-hidden="true"].hero-atmosphere__glow) { position: relative; z-index: 1; }
+[data-atmosphere="oss"] > [aria-hidden="true"].hero-atmosphere__glow { background: radial-gradient(ellipse 38% 58% at 86% 22%, rgb(6 182 212 / .11), transparent 72%); }
+[data-theme="dark"] > [aria-hidden="true"].hero-atmosphere__glow { background-color: transparent; background-image: radial-gradient(ellipse 46% 68% at 86% 22%, rgb(34 211 238 / .10), transparent 72%); }
+[data-atmosphere="project"] > [aria-hidden="true"].hero-atmosphere__glow::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 30% 42% at 86% 22%, var(--project-accent, #06B6D4) 0%, transparent 72%); opacity: .08; pointer-events: none; }
+@media (forced-colors: active), print { .hero-atmosphere > [aria-hidden="true"].hero-atmosphere__glow, .hero-atmosphere > [aria-hidden="true"].hero-atmosphere__glow::after { display: none; } }
