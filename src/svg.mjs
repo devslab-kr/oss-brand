@@ -1,4 +1,5 @@
 import { getGlyphDefinition } from "./glyphs.mjs";
+import { APPROVED_REGISTRY_CONTRACT } from "./registry-contract.mjs";
 
 const VARIANT_COLORS = Object.freeze({
   monochrome: "#18181B",
@@ -11,20 +12,30 @@ function escapeAttribute(value) {
   return String(value).replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character]);
 }
 
+export function resolveCanonicalProject(project) {
+  if (!project || typeof project !== "object") throw new TypeError("A registered OSS project is required");
+  const canonical = APPROVED_REGISTRY_CONTRACT.find(({ registryId }) => registryId === project.registryId);
+  if (!canonical) throw new RangeError(`Unknown approved OSS registry id: ${project.registryId ?? "missing"}`);
+  if (project.id !== canonical.id) {
+    throw new TypeError(`Project id ${project.id ?? "missing"} does not match approved registry id ${canonical.registryId}`);
+  }
+  return canonical;
+}
+
 function colorFor(project, variant) {
-  if (variant === "color") return project?.ossAccent?.light ?? "#0E7490";
+  if (variant === "color") return project.ossAccent.light;
   if (variant in VARIANT_COLORS) return VARIANT_COLORS[variant];
   throw new RangeError(`Unsupported glyph variant: ${variant}`);
 }
 
 export function buildGlyphSvg(project, { variant = "color" } = {}) {
-  if (!project?.registryId || !project?.id) throw new TypeError("A registered OSS project is required");
-  const glyph = getGlyphDefinition(project.registryId);
-  const color = colorFor(project, variant);
-  const titleId = `oss-${project.registryId}-title`;
+  const canonical = resolveCanonicalProject(project);
+  const glyph = getGlyphDefinition(canonical.registryId);
+  const color = colorFor(canonical, variant);
+  const titleId = `oss-${canonical.registryId}-title`;
   const paths = glyph.paths.map((d) => `<path d="${d}" />`).join("");
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${glyph.viewBox}" role="img" aria-labelledby="${titleId}" data-oss-project="${escapeAttribute(project.registryId)}" data-variant="${variant}"><title id="${titleId}">${escapeAttribute(project.name)}</title><g fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths}</g></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${glyph.viewBox}" role="img" aria-labelledby="${titleId}" data-oss-project="${canonical.registryId}" data-variant="${variant}"><title id="${titleId}">${escapeAttribute(canonical.name)}</title><g fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths}</g></svg>`;
 }
 
 function geometryNumbers(svg) {
@@ -43,15 +54,21 @@ function geometryNumbers(svg) {
 export function validateSvg(fileName, svg, project) {
   const errors = [];
   const prefix = `${fileName}:`;
+  let canonical;
+  try {
+    canonical = resolveCanonicalProject(project);
+  } catch (error) {
+    return [`${prefix} ${error.message}`];
+  }
   if (typeof svg !== "string") return [`${prefix} SVG must be a string`];
   if (!/^<svg\b/i.test(svg)) errors.push(`${prefix} root element must be svg`);
   if (!/\bviewBox="0 0 32 32"/i.test(svg)) errors.push(`${prefix} must use viewBox \"0 0 32 32\"`);
   if (!/\bstroke-width="2"/i.test(svg)) errors.push(`${prefix} must use a 2-unit primary outline`);
   if (/\bstroke-width="(?!2(?:\.0+)?")/i.test(svg)) errors.push(`${prefix} must use a 2-unit primary outline`);
   const emittedProject = svg.match(/\bdata-oss-project="([^"]+)"/i)?.[1];
-  if (project?.registryId && !emittedProject) errors.push(`${prefix} missing OSS project identity`);
-  if (project?.registryId && emittedProject && emittedProject !== project.registryId) {
-    errors.push(`${prefix} OSS project identity must equal ${project.registryId}`);
+  if (!emittedProject) errors.push(`${prefix} missing OSS project identity`);
+  if (emittedProject && emittedProject !== canonical.registryId) {
+    errors.push(`${prefix} OSS project identity must equal ${canonical.registryId}`);
   }
 
   for (const element of PROHIBITED_ELEMENTS) {
@@ -66,7 +83,7 @@ export function validateSvg(fileName, svg, project) {
   const variant = svg.match(/\bdata-variant="([^"]+)"/i)?.[1];
   const paint = svg.match(/\bstroke="(#[0-9A-Fa-f]{6})"/i)?.[1]?.toUpperCase();
   const expectedPaint = variant === "color"
-    ? project?.ossAccent?.light
+    ? canonical.ossAccent.light
     : variant === "monochrome"
       ? VARIANT_COLORS.monochrome
       : variant === "reversed"

@@ -27,7 +27,7 @@ export function buildProjectLockup(project, { endorsement = false } = {}) {
     ? `<g data-endorsement="Open source by DevsLab" aria-label="Open source by DevsLab"><path d="M48 39H202" stroke="currentColor" stroke-width="1" opacity=".35" />${outlinedName("Open source by DevsLab", 48, 40)}</g>`
     : "";
   const runtimeGroup = runtime
-    ? `<g data-runtime-label="JavaScript implementation" aria-label="JavaScript implementation"><path d="M48 8H77V20H48Z" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M56 12H69M64 10L69 12L64 14" fill="none" stroke="currentColor" stroke-width="1.5" /></g>`
+    ? `<g data-runtime-layer="neutral" data-runtime-label="JavaScript implementation" aria-label="JavaScript implementation"><path d="M48 8H77V20H48Z" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M56 12H69M64 10L69 12L64 14" fill="none" stroke="currentColor" stroke-width="1.5" /></g>`
     : "";
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" role="img" aria-label="${escapeAttribute(accessibleParts)}" data-oss-lockup="${escapeAttribute(project.registryId)}">${glyphGroup(project)}${outlinedName(project.name, 48, 18)}${runtimeGroup}${endorsementGroup}</svg>`;

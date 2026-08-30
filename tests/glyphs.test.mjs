@@ -28,17 +28,17 @@ test("each project emits a 32 by 32 glyph on the approved safety grid", async ()
   }
 });
 
-test("glyph output provides an individual deterministic identity for all twelve projects", async () => {
+test("security implementations share their approved core glyph without serialization tricks", async () => {
   const projects = await loadRegistry(registryUrl);
   const geometryHashes = projects.map((project) => createHash("sha256")
     .update(canonicalGeometry(getGlyphDefinition(project.registryId).geometry))
     .digest("hex"));
 
-  assert.equal(new Set(geometryHashes).size, 12);
-  assert.notEqual(
+  assert.equal(new Set(geometryHashes).size, 11, "O02/O03 are the one approved shared-core exception");
+  assert.equal(
     getGlyphDefinition("O02").geometry,
     getGlyphDefinition("O03").geometry,
-    "the JavaScript implementation has an actual, meaningful guard-route variation",
+    "O03 runtime identity belongs in its lockup, never inside the shared security glyph",
   );
 });
 

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import test from "node:test";
 
 import { buildProjectLockup, buildWordmark } from "../src/assets.mjs";
@@ -24,9 +25,21 @@ test("builds project lockups with sibling and DevsLab endorsement behavior", asy
   const javaLockup = buildProjectLockup(javaGuard, { endorsement: false });
 
   assert.match(jsLockup, /ssrf-guard-js/);
+  assert.match(jsLockup, /data-runtime-layer="neutral"/);
   assert.match(jsLockup, /JavaScript implementation/);
   assert.match(jsLockup, /Open source by DevsLab/);
   assert.match(javaLockup, /ssrf-guard/);
   assert.doesNotMatch(javaLockup, /JavaScript implementation/);
   assert.doesNotMatch(javaLockup, /Open source by DevsLab/);
+});
+
+test("complete lockups retain twelve non-confusable identities despite the shared security core", async () => {
+  const projects = await loadRegistry(new URL("../registry/oss-projects.json", import.meta.url));
+  const geometry = projects.map((project) => {
+    const lockup = buildProjectLockup(project, { endorsement: false });
+    return [...lockup.matchAll(/<path d="([^"]+)"/g)].map((match) => match[1]).join("|");
+  });
+  const hashes = geometry.map((paths) => createHash("sha256").update(paths).digest("hex"));
+
+  assert.equal(new Set(hashes).size, 12);
 });

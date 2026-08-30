@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { validateSvg } from "../src/svg.mjs";
+import { buildGlyphSvg, validateSvg } from "../src/svg.mjs";
 import { loadRegistry } from "../src/registry.mjs";
 
 test("validates generated glyph SVGs as deterministic and safe", async () => {
@@ -15,7 +15,7 @@ test("validates generated glyph SVGs as deterministic and safe", async () => {
 });
 
 test("rejects unsafe SVG constructs and invalid master geometry", () => {
-  const project = { id: "sample", registryId: "O01" };
+  const project = { id: "editor-ruler", registryId: "O01" };
   const invalid = [
     ["script.svg", '<svg viewBox="0 0 32 32"><script>alert(1)</script></svg>', /prohibited element: script/],
     ["foreign.svg", '<svg viewBox="0 0 32 32"><foreignObject /></svg>', /prohibited element: foreignObject/],
@@ -34,7 +34,6 @@ test("rejects unsafe SVG constructs and invalid master geometry", () => {
 
 test("binds generated project identity and variant paint to the registered project", async () => {
   const [project] = await loadRegistry(new URL("../registry/oss-projects.json", import.meta.url));
-  const { buildGlyphSvg } = await import("../src/svg.mjs");
   const color = buildGlyphSvg(project, { variant: "color" });
   const monochrome = buildGlyphSvg(project, { variant: "monochrome" });
   const reversed = buildGlyphSvg(project, { variant: "reversed" });
@@ -52,8 +51,24 @@ test("binds generated project identity and variant paint to the registered proje
     .some((error) => error.includes("invalid reversed paint")));
 });
 
+test("rejects spoofed identity and prevents caller-controlled XML paint injection", async () => {
+  const [project] = await loadRegistry(new URL("../registry/oss-projects.json", import.meta.url));
+  const mismatchedIdentity = { ...project, id: 'editor-ruler" /><script>bad()</script>' };
+  const poisonedColor = { ...project, ossAccent: { ...project.ossAccent, light: '" onload="bad()' } };
+  const canonicalSvg = buildGlyphSvg(project, { variant: "color" });
+
+  assert.throws(() => buildGlyphSvg(mismatchedIdentity, { variant: "color" }), /does not match approved registry id/);
+  const output = buildGlyphSvg(poisonedColor, { variant: "color" });
+  assert.equal(output, canonicalSvg, "paint and text come only from the canonical contract");
+  assert.doesNotMatch(output, /onload|<script|bad\(/i);
+  assert.ok(validateSvg("spoofed.svg", canonicalSvg, mismatchedIdentity)
+    .some((error) => error.includes("does not match approved registry id")));
+  assert.ok(validateSvg("contract-paint.svg", canonicalSvg.replace("#0E7490", "#FF0000"), poisonedColor)
+    .some((error) => error.includes("invalid color paint")));
+});
+
 test("rejects glyph geometry outside the 4-unit safety margin", () => {
   const svg = '<svg viewBox="0 0 32 32"><path d="M2 4H28" fill="none" stroke="currentColor" stroke-width="2" /></svg>';
-  assert.ok(validateSvg("outside.svg", svg, { id: "sample", registryId: "O01" })
+  assert.ok(validateSvg("outside.svg", svg, { id: "editor-ruler", registryId: "O01" })
     .some((error) => error.includes("4-unit safety margin")));
 });
