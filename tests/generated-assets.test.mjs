@@ -1,13 +1,13 @@
 import assert from "node:assert/strict";
 import { mkdtemp, readFile, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, posix, win32 } from "node:path";
-import { pathToFileURL } from "node:url";
+import { dirname, join, posix, resolve, win32 } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import test from "node:test";
 import sharp from "sharp";
 import { unzipSync } from "fflate";
 
-import { generate, generateProject, isPathInside } from "../scripts/generate.mjs";
+import { generate, generateProject, isPathInside, projectOutputUrl } from "../scripts/generate.mjs";
 import { loadRegistry } from "../src/registry.mjs";
 
 const registryUrl = new URL("../registry/oss-projects.json", import.meta.url);
@@ -35,8 +35,10 @@ async function opaqueBounds(file) {
 test("generator creates the complete cross-platform image matrix", async () => {
   const [project] = await loadRegistry(registryUrl);
   const root = await mkdtemp(join(tmpdir(), "oss-brand-assets-"));
-  await generateProject(project, pathToFileURL(root));
+  const projectUrl = await generateProject(project, pathToFileURL(root));
   const assets = join(root, project.id);
+  assert.equal(resolve(fileURLToPath(projectUrl)), resolve(assets), "returned file URL resolves to the generated project directory");
+  assert.equal((await stat(fileURLToPath(projectUrl))).isDirectory(), true);
 
   for (const size of REQUIRED_ICON_SIZES) {
     const image = await metadata(join(assets, "icons", `icon-${size}.png`));
@@ -78,11 +80,16 @@ test("Kokey and DataLinq receive their relationship-specific derivatives", async
   }
   const storeManifest = JSON.parse(await readFile(join(root, "kokey", "extension", "store", "manifest.json"), "utf8"));
   assert.deepEqual(storeManifest, {
-    icon: "icon-128.png",
+    icon: "../icon-128.png",
     marquee: "promo-marquee-1400x560.png",
     screenshot: "screenshot-1280x800.png",
     smallPromo: "promo-small-440x280.png",
   });
+  const manifestDirectory = dirname(join(root, "kokey", "extension", "store", "manifest.json"));
+  for (const [name, reference] of Object.entries(storeManifest)) {
+    const target = resolve(manifestDirectory, reference);
+    assert.equal((await stat(target)).isFile(), true, `${name} resolves from the manifest directory to a generated local file`);
+  }
   const terminal = await readFile(join(root, "datalinq", "terminal", "datalinq.txt"), "utf8");
   const noColor = await readFile(join(root, "datalinq", "terminal", "datalinq-no-color.txt"), "utf8");
   assert.match(terminal, /^DataLinq\n/m);
@@ -100,6 +107,16 @@ test("path boundary checks use native, POSIX, and Windows semantics without sepa
   assert.equal(isPathInside("/tmp/assets", "/tmp/escape", posix), false);
   assert.equal(isPathInside("C:\\assets", "C:\\assets\\editor-ruler", win32), true);
   assert.equal(isPathInside("C:\\assets", "C:\\outside", win32), false);
+});
+
+test("project output URLs preserve a POSIX directory path without appending a Windows separator", () => {
+  const inputs = [];
+  const href = projectOutputUrl("/tmp/oss-brand/editor-ruler", (path) => {
+    inputs.push(path);
+    return { href: "file:///tmp/oss-brand/editor-ruler" };
+  });
+  assert.equal(href, "file:///tmp/oss-brand/editor-ruler");
+  assert.deepEqual(inputs, ["/tmp/oss-brand/editor-ruler"]);
 });
 
 test("portfolio generation creates twelve archives and the portable CSS contract", async () => {

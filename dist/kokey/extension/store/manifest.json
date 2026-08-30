@@ -1,5 +1,5 @@
 {
-  "icon": "icon-128.png",
+  "icon": "../icon-128.png",
   "marquee": "promo-marquee-1400x560.png",
   "screenshot": "screenshot-1280x800.png",
   "smallPromo": "promo-small-440x280.png"

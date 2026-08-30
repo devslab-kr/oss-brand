@@ -24,6 +24,10 @@ export function isPathInside(root, target, pathApi = { isAbsolute, relative, sep
   return relativePath !== "" && relativePath !== ".." && !relativePath.startsWith(`..${pathApi.sep}`) && !pathApi.isAbsolute(relativePath);
 }
 
+export function projectOutputUrl(projectDir, toFileUrl = pathToFileURL) {
+  return toFileUrl(projectDir).href;
+}
+
 function archivePath(path) {
   return path.split(sep).join("/");
 }
@@ -100,7 +104,7 @@ export async function generateProject(project, outputUrl) {
       ["screenshot-1280x800.png", "store-screenshot", 1280, 800],
     ];
     for (const [fileName, kind, width, height] of extensionAssets) await renderSvg(buildSocialSvg(canonical, { kind }), join(projectDir, "extension", "store", fileName), width, height);
-    await write(join(projectDir, "extension", "store", "manifest.json"), `${JSON.stringify({ icon: "icon-128.png", marquee: "promo-marquee-1400x560.png", screenshot: "screenshot-1280x800.png", smallPromo: "promo-small-440x280.png" }, null, 2)}\n`);
+    await write(join(projectDir, "extension", "store", "manifest.json"), `${JSON.stringify({ icon: "../icon-128.png", marquee: "promo-marquee-1400x560.png", screenshot: "screenshot-1280x800.png", smallPromo: "promo-small-440x280.png" }, null, 2)}\n`);
   }
   if (canonical.surfaces.terminal) {
     const terminal = "DataLinq\n========\n[ source ] ===> [ target ]\nOpen source by DevsLab\n";
@@ -108,7 +112,7 @@ export async function generateProject(project, outputUrl) {
     await write(join(projectDir, "terminal", "datalinq-no-color.txt"), terminal);
   }
   await writeChecksums(projectDir);
-  return pathToFileURL(`${projectDir}${"\\"}`).href;
+  return projectOutputUrl(projectDir);
 }
 
 function tokensCss() {
