@@ -1,19 +1,14 @@
 import { createHash } from "node:crypto";
 import { access, readFile, readdir } from "node:fs/promises";
-import { join, posix } from "node:path";
+import { join } from "node:path";
 import { unzipSync } from "fflate";
 
 import { loadRegistry } from "../src/registry.mjs";
+import { requiredProjectFiles, validateArchiveEntryNames, validateArchivePath, validateProjectAssetMatrix } from "../src/release-validation.mjs";
 
 const root = process.cwd();
-const dist = join(root, "dist");
+const dist = process.env.OSS_BRAND_DIST ?? join(root, "dist");
 const downloads = join(dist, "downloads");
-const requiredArchiveFiles = [
-  "checksums.txt", "favicon.ico", "favicon.svg", "glyph-color.svg", "glyph-monochrome.svg",
-  "glyph-reversed.svg", "lockup.svg", "lockup-endorsed.svg", "og.png", "readme-header.png", "wordmark.svg",
-  "icons/icon-16.png", "icons/icon-32.png", "icons/icon-48.png", "icons/icon-180.png", "icons/icon-192.png", "icons/icon-512.png",
-];
-const unsafePath = /^(?:\/|.*(?:^|\/)\.\.(?:\/|$))/;
 const secret = /-----BEGIN(?: [A-Z]+)? PRIVATE KEY-----|(?:ghp|github_pat|npm)_[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}/;
 const sha256 = (value) => createHash("sha256").update(value).digest("hex");
 
@@ -25,11 +20,14 @@ for (const file of ["README.md", "LICENSE", "BRAND-LICENSE.md", "package.json"])
 }
 
 const packageJson = JSON.parse(await readFile(join(root, "package.json"), "utf8"));
-if (packageJson.version !== "0.1.0") fail(`expected package version 0.1.0, found ${packageJson.version}`);
+if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/.test(packageJson.version)) fail(`package version is not valid semver: ${packageJson.version}`);
 const index = JSON.parse(await readFile(join(dist, "index.json"), "utf8"));
 if (index.version !== 1) fail("dist/index.json must declare registry version 1");
 
 const projects = await loadRegistry(new URL("../registry/oss-projects.json", import.meta.url));
+for (const project of projects) {
+  for (const error of await validateProjectAssetMatrix(join(dist, project.id), project)) fail(error);
+}
 const ids = projects.map((project) => project.id);
 const files = await readdir(downloads);
 const zips = files.filter((file) => file.endsWith(".zip")).sort();
@@ -49,19 +47,26 @@ for (const file of zips) {
   if (sha256(archive) !== checksums.get(file)) fail(`checksum mismatch for ${file}`);
   const entries = unzipSync(archive);
   const names = Object.keys(entries).sort();
+  try { validateArchiveEntryNames(names); }
+  catch (error) { fail(`${file} contains ${error.message}`); }
   for (const name of names) {
-    if (unsafePath.test(name) || posix.normalize(name) !== name) fail(`${file} contains unsafe archive path ${name}`);
     if (secret.test(bytesToText(entries[name]))) fail(`${file} contains a potential secret in ${name}`);
   }
-  for (const required of requiredArchiveFiles) if (!Object.hasOwn(entries, required)) fail(`${file} is missing ${required}`);
+  const project = projects.find((candidate) => `${candidate.id}.zip` === file);
+  for (const required of requiredProjectFiles(project)) if (!Object.hasOwn(entries, required)) fail(`${file} is missing ${required}`);
   const projectChecksums = new Map();
   for (const line of bytesToText(entries["checksums.txt"]).trim().split("\n")) {
     const match = /^([a-f0-9]{64})  (.+)$/.exec(line);
-    if (!match || projectChecksums.has(match?.[2])) fail(`${file} has invalid project checksums`);
-    projectChecksums.set(match[2], match[1]);
+    if (!match) fail(`${file} has invalid project checksums`);
+    let path;
+    try { path = validateArchivePath(match[2]); }
+    catch { fail(`${file} has invalid project checksum path`); }
+    if (projectChecksums.has(path.toLowerCase())) fail(`${file} has invalid project checksums`);
+    projectChecksums.set(path.toLowerCase(), match[1]);
   }
   for (const name of names.filter((name) => name !== "checksums.txt")) {
-    if (projectChecksums.get(name) !== sha256(entries[name])) fail(`${file} project checksum mismatch for ${name}`);
+    const path = validateArchivePath(name);
+    if (projectChecksums.get(path.toLowerCase()) !== sha256(entries[name])) fail(`${file} project checksum mismatch for ${name}`);
   }
 }
 

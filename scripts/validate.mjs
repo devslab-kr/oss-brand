@@ -2,10 +2,11 @@ import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { loadRegistry, validateRegistry } from "../src/registry.mjs";
+import { validateProjectAssetMatrix } from "../src/release-validation.mjs";
 import { validateSvg } from "../src/svg.mjs";
 
 const root = process.cwd();
-const dist = join(root, "dist");
+const dist = process.env.OSS_BRAND_DIST ?? join(root, "dist");
 
 async function mustExist(path) {
   await access(path);
@@ -23,10 +24,7 @@ for (const project of projects) {
       errors.push(`${project.id}: missing readable glyph-${variant}.svg (${error.code ?? error.message})`);
     }
   }
-  for (const file of ["favicon.ico", "favicon.svg", "og.png", "readme-header.png", "checksums.txt"]) {
-    try { await mustExist(join(dist, project.id, file)); }
-    catch { errors.push(`${project.id}: missing ${file}`); }
-  }
+  errors.push(...await validateProjectAssetMatrix(join(dist, project.id), project));
 }
 
 try {

@@ -14,8 +14,9 @@ DevsLab` endorsement where room permits.
 
 Download the versioned project ZIP matching the registered project ID from the
 GitHub Release. Vendor the extracted snapshot in a consumer repository and
-verify its `checksums.txt` against the release `SHA256SUMS.txt`; do not add this
-repository as a runtime dependency. Official rules live at
+first verify the downloaded ZIP bytes against the release `SHA256SUMS.txt`,
+then extract it and verify every extracted file against its internal
+`checksums.txt`; do not add this repository as a runtime dependency. Official rules live at
 https://devslab.kr/brand/open-source/ and discovery/demos live at
 https://devslab-kr.github.io/.
 
