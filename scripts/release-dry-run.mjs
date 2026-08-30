@@ -35,7 +35,7 @@ const expectedZips = ids.map((id) => `${id}.zip`).sort();
 if (zips.length !== 12 || JSON.stringify(zips) !== JSON.stringify(expectedZips)) fail("downloads must contain exactly the 12 registered project ZIPs");
 
 const checksums = new Map();
-for (const line of (await readFile(join(downloads, "SHA256SUMS.txt"), "utf8")).trim().split("\n")) {
+for (const line of (await readFile(join(downloads, "SHA256SUMS.txt"), "utf8")).trim().split(/\r?\n/)) {
   const match = /^([a-f0-9]{64})  ([a-z0-9-]+\.zip)$/.exec(line);
   if (!match || checksums.has(match?.[2])) fail("SHA256SUMS.txt contains an invalid or duplicate entry");
   checksums.set(match[2], match[1]);
