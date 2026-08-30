@@ -8,7 +8,11 @@
   },
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "generate": "node scripts/generate.mjs"
+    "generate": "node scripts/generate.mjs",
+    "validate": "node scripts/validate.mjs",
+    "check:determinism": "node scripts/check-determinism.mjs",
+    "release:dry-run": "node scripts/release-dry-run.mjs",
+    "check": "npm run generate && npm test && npm run validate && npm run check:determinism && npm run release:dry-run"
   },
   "dependencies": {
     "@fontsource/geist": "5.3.0",
