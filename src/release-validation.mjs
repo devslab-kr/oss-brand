@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 const commonFiles = [
   "checksums.txt", "favicon.ico", "favicon.svg",
-  "glyph-color.svg", "glyph-monochrome.svg", "glyph-reversed.svg",
+  "glyph-color.svg", "glyph-dark.svg", "glyph-monochrome.svg", "glyph-reversed.svg",
   "wordmark.svg", "lockup.svg", "lockup-endorsed.svg",
   "apple-touch-icon.png", "pwa-192.png", "pwa-512.png", "maskable-192.png", "maskable-512.png",
   "og.png", "readme-header.png",

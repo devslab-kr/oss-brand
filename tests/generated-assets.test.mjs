@@ -53,6 +53,14 @@ test("generator creates the complete cross-platform image matrix", async () => {
   const favicon = await readFile(join(assets, "favicon.ico"));
   assert.equal(favicon.readUInt16LE(4), 3, "favicon has 16, 32, and 48 pixel frames");
   assert.ok((await stat(join(assets, "checksums.txt"))).size > 0);
+  const colorSvg = await readFile(join(assets, "glyph-color.svg"), "utf8");
+  const darkSvg = await readFile(join(assets, "glyph-dark.svg"), "utf8");
+  const monochromeSvg = await readFile(join(assets, "glyph-monochrome.svg"), "utf8");
+  for (const svg of [colorSvg, darkSvg, monochromeSvg]) {
+    assert.match(svg, /x="5" y="5" width="16" height="16" rx="2"/);
+    assert.match(svg, /x="11" y="11" width="16" height="16" rx="2"/);
+    assert.match(svg, /stroke-width="1\.8"/);
+  }
   for (const size of [192, 512]) {
     const bounds = await opaqueBounds(join(assets, `maskable-${size}.png`));
     const lower = Math.ceil(size * .2);

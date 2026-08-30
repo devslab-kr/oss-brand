@@ -28,20 +28,25 @@ export function resolveCanonicalProject(project) {
   return canonical;
 }
 
-function colorFor(project, variant) {
-  if (variant === "color") return project.ossAccent.light;
-  if (variant in VARIANT_COLORS) return VARIANT_COLORS[variant];
+function paintFor(project, variant) {
+  if (variant === "color") return { rear: project.accent.dark, front: project.accent.light, route: "#FFFFFF" };
+  if (variant === "dark") return { rear: project.accent.light, front: project.accent.dark, route: "#18181B" };
+  if (variant === "monochrome") return { rear: "none", front: VARIANT_COLORS.monochrome, route: "#FFFFFF", outline: VARIANT_COLORS.monochrome };
+  if (variant === "reversed") return { rear: "none", front: VARIANT_COLORS.reversed, route: "#18181B", outline: VARIANT_COLORS.reversed };
   throw new RangeError(`Unsupported glyph variant: ${variant}`);
 }
 
 export function buildGlyphSvg(project, { variant = "color" } = {}) {
   const canonical = resolveCanonicalProject(project);
   const glyph = getGlyphDefinition(canonical.registryId);
-  const color = colorFor(canonical, variant);
+  const paint = paintFor(canonical, variant);
   const titleId = `oss-${canonical.registryId}-title`;
   const paths = glyph.paths.map((d) => `<path d="${d}" />`).join("");
+  const rearStroke = paint.outline ? ` stroke="${paint.outline}" stroke-width="2"` : "";
+  const frame = `<g data-layer="q-frame"><rect x="5" y="5" width="16" height="16" rx="2" fill="${paint.rear}"${rearStroke}/><rect x="11" y="11" width="16" height="16" rx="2" fill="${paint.front}"/></g>`;
+  const route = `<g data-layer="product-route" fill="none" stroke="${paint.route}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths}</g>`;
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${glyph.viewBox}" role="img" aria-labelledby="${titleId}" data-oss-project="${canonical.registryId}" data-variant="${variant}"><title id="${titleId}">${escapeAttribute(canonical.name)}</title><g fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths}</g></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${glyph.viewBox}" role="img" aria-labelledby="${titleId}" data-oss-project="${canonical.registryId}" data-variant="${variant}"><title id="${titleId}">${escapeAttribute(canonical.name)}</title>${frame}${route}</svg>`;
 }
 
 function geometryNumbers(svg) {
@@ -69,8 +74,7 @@ export function validateSvg(fileName, svg, project) {
   if (typeof svg !== "string") return [`${prefix} SVG must be a string`];
   if (!/^<svg\b/i.test(svg)) errors.push(`${prefix} root element must be svg`);
   if (!/\bviewBox="0 0 32 32"/i.test(svg)) errors.push(`${prefix} must use viewBox \"0 0 32 32\"`);
-  if (!/\bstroke-width="2"/i.test(svg)) errors.push(`${prefix} must use a 2-unit primary outline`);
-  if (/\bstroke-width="(?!2(?:\.0+)?")/i.test(svg)) errors.push(`${prefix} must use a 2-unit primary outline`);
+  if (!/data-layer="product-route"[^>]*\bstroke-width="1\.8"/i.test(svg)) errors.push(`${prefix} must use a 1.8-unit route`);
   const emittedProject = svg.match(/\bdata-oss-project="([^"]+)"/i)?.[1];
   if (!emittedProject) errors.push(`${prefix} missing OSS project identity`);
   if (emittedProject && emittedProject !== canonical.registryId) {
@@ -87,16 +91,15 @@ export function validateSvg(fileName, svg, project) {
   if (/\b(?:font-family|@font-face)\b/i.test(svg)) errors.push(`${prefix} runtime font dependency is not allowed`);
 
   const variant = svg.match(/\bdata-variant="([^"]+)"/i)?.[1];
-  const paint = svg.match(/\bstroke="(#[0-9A-Fa-f]{6})"/i)?.[1]?.toUpperCase();
-  const expectedPaint = variant === "color"
-    ? canonical.ossAccent.light
-    : variant === "monochrome"
-      ? VARIANT_COLORS.monochrome
-      : variant === "reversed"
-        ? VARIANT_COLORS.reversed
-        : undefined;
-  if (!variant || !expectedPaint) errors.push(`${prefix} invalid glyph variant`);
-  else if (paint !== expectedPaint.toUpperCase()) errors.push(`${prefix} invalid ${variant} paint`);
+  let expectedPaint;
+  try { expectedPaint = paintFor(canonical, variant); }
+  catch { errors.push(`${prefix} invalid glyph variant`); }
+  if (expectedPaint) {
+    const expectedRear = `<rect x="5" y="5" width="16" height="16" rx="2" fill="${expectedPaint.rear}"${expectedPaint.outline ? ` stroke="${expectedPaint.outline}" stroke-width="2"` : ""}/>`;
+    const expectedFront = `<rect x="11" y="11" width="16" height="16" rx="2" fill="${expectedPaint.front}"/>`;
+    const expectedRoute = `data-layer="product-route" fill="none" stroke="${expectedPaint.route}" stroke-width="1.8"`;
+    if (!svg.includes(expectedRear) || !svg.includes(expectedFront) || !svg.includes(expectedRoute)) errors.push(`${prefix} invalid ${variant} paint`);
+  }
 
   const coordinates = geometryNumbers(svg);
   if (coordinates.some((coordinate) => coordinate < 4 || coordinate > 28)) {
