@@ -23,11 +23,33 @@ test("rejects unsafe SVG constructs and invalid master geometry", () => {
     ["link.svg", '<svg viewBox="0 0 32 32"><path href="https:\/\/example.com" /></svg>', /external resource/],
     ["bad-grid.svg", '<svg viewBox="0 0 24 24"><path stroke-width="2" /></svg>', /must use viewBox/],
     ["bad-stroke.svg", '<svg viewBox="0 0 32 32"><path stroke-width="1" /></svg>', /must use a 2-unit/],
+    ["linear.svg", '<svg viewBox="0 0 32 32"><linearGradient id="a" /></svg>', /prohibited gradient/],
+    ["radial.svg", '<svg viewBox="0 0 32 32"><radialGradient id="a" /></svg>', /prohibited gradient/],
   ];
 
   for (const [fileName, svg, expected] of invalid) {
     assert.ok(validateSvg(fileName, svg, project).some((error) => expected.test(error)), fileName);
   }
+});
+
+test("binds generated project identity and variant paint to the registered project", async () => {
+  const [project] = await loadRegistry(new URL("../registry/oss-projects.json", import.meta.url));
+  const { buildGlyphSvg } = await import("../src/svg.mjs");
+  const color = buildGlyphSvg(project, { variant: "color" });
+  const monochrome = buildGlyphSvg(project, { variant: "monochrome" });
+  const reversed = buildGlyphSvg(project, { variant: "reversed" });
+
+  assert.deepEqual(validateSvg("color.svg", color, project), []);
+  assert.deepEqual(validateSvg("monochrome.svg", monochrome, project), []);
+  assert.deepEqual(validateSvg("reversed.svg", reversed, project), []);
+  assert.ok(validateSvg("wrong-project.svg", color.replace('data-oss-project="O01"', 'data-oss-project="O02"'), project)
+    .some((error) => error.includes("must equal O01")));
+  assert.ok(validateSvg("wrong-color.svg", color.replace("#0E7490", "#FF0000"), project)
+    .some((error) => error.includes("invalid color paint")));
+  assert.ok(validateSvg("wrong-mono.svg", monochrome.replace("#18181B", "#FFFFFF"), project)
+    .some((error) => error.includes("invalid monochrome paint")));
+  assert.ok(validateSvg("wrong-reversed.svg", reversed.replace("#FFFFFF", "#18181B"), project)
+    .some((error) => error.includes("invalid reversed paint")));
 });
 
 test("rejects glyph geometry outside the 4-unit safety margin", () => {

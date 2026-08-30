@@ -8,6 +8,9 @@ test("builds outlined wordmarks without runtime font dependencies", () => {
   const svg = buildWordmark("DataLinq");
 
   assert.match(svg, /<path /);
+  assert.match(svg, /data-font-source="@fontsource\/geist\/.*\.woff2"/);
+  assert.match(svg, /data-font-license="OFL-1\.1"/);
+  assert.match(svg, /[CQ]/, "actual font outlines include curve commands from the source font");
   assert.doesNotMatch(svg, /<(?:text|style)\b|font-family|@font-face/i);
   assert.match(svg, /aria-label="DataLinq"/);
 });

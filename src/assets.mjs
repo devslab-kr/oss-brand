@@ -13,7 +13,7 @@ function glyphGroup(project) {
 function outlinedName(name, x, y) {
   const raw = buildWordmark(name);
   const inner = raw.match(/<g[^>]*>([\s\S]*)<\/g>/)?.[1] ?? "";
-  return `<g transform="translate(${x} ${y}) scale(2.25)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">${inner}</g>`;
+  return `<g transform="translate(${x} ${y}) scale(2.25)" fill="currentColor">${inner}</g>`;
 }
 
 export { buildWordmark };

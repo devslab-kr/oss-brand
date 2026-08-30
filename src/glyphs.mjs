@@ -22,7 +22,7 @@ const SECURITY_BOUNDARY = Object.freeze([
   "M4 16H11", "M21 16H28", "M11 7H21V16C21 21 17.7 24.8 16 26C14.3 24.8 11 21 11 16Z", "M14 16H18",
 ]);
 const SECURITY_BOUNDARY_JS = Object.freeze([
-  "M11 7H21V16C21 21 17.7 24.8 16 26C14.3 24.8 11 21 11 16Z", "M14 16H18", "M4 16H11", "M21 16H28",
+  "M4 16H8L11 13", "M8 16L11 19", "M21 16H28", "M11 7H21V16C21 21 17.7 24.8 16 26C14.3 24.8 11 21 11 16Z", "M14 16H18",
 ]);
 
 const DEFINITIONS = new Map([
@@ -32,7 +32,7 @@ const DEFINITIONS = new Map([
   ["O02", definition("O02", "ssrf-guard protected boundary", SECURITY_BOUNDARY)],
   ["O03", definition("O03", "ssrf-guard-js protected boundary", SECURITY_BOUNDARY_JS)],
   ["O04", definition("O04", "numkey numeric caret", [
-    "M5 9H11V15H5Z", "M13 9H19V15H13Z", "M21 9H27V15H21Z", "M5 19H11V25H5Z", "M13 19H19V25H13Z", "M22 24L27 19", "M22 19L27 24",
+    "M5 9H11V15H5Z", "M13 9H19V15H13Z", "M21 9H27V15H21Z", "M5 19H11V25H5Z", "M24 6V26", "M20 18L24 22L28 18",
   ])],
   ["O05", definition("O05", "kokey correction path", [
     "M5 8H13V16H5Z", "M19 16H27V24H19Z", "M13 12H17C19 12 20 14 20 16", "M16 9L20 13L16 17",

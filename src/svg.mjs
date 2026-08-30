@@ -48,15 +48,32 @@ export function validateSvg(fileName, svg, project) {
   if (!/\bviewBox="0 0 32 32"/i.test(svg)) errors.push(`${prefix} must use viewBox \"0 0 32 32\"`);
   if (!/\bstroke-width="2"/i.test(svg)) errors.push(`${prefix} must use a 2-unit primary outline`);
   if (/\bstroke-width="(?!2(?:\.0+)?")/i.test(svg)) errors.push(`${prefix} must use a 2-unit primary outline`);
-  if (!/\bdata-oss-project="O\d{2}"/.test(svg) && project?.registryId) errors.push(`${prefix} missing OSS project identity`);
+  const emittedProject = svg.match(/\bdata-oss-project="([^"]+)"/i)?.[1];
+  if (project?.registryId && !emittedProject) errors.push(`${prefix} missing OSS project identity`);
+  if (project?.registryId && emittedProject && emittedProject !== project.registryId) {
+    errors.push(`${prefix} OSS project identity must equal ${project.registryId}`);
+  }
 
   for (const element of PROHIBITED_ELEMENTS) {
     if (new RegExp(`<${element}\\b`, "i").test(svg)) errors.push(`${prefix} prohibited element: ${element}`);
   }
+  if (/<(?:linearGradient|radialGradient)\b/i.test(svg)) errors.push(`${prefix} prohibited gradient`);
   if (/<(?:animate|set)\b/i.test(svg)) errors.push(`${prefix} prohibited animation element`);
   if (/\son[a-z]+\s*=/i.test(svg)) errors.push(`${prefix} prohibited event handler`);
   if (/\b(?:href|xlink:href)="(?:https?:|data:|javascript:)/i.test(svg)) errors.push(`${prefix} external resource is not allowed`);
   if (/\b(?:font-family|@font-face)\b/i.test(svg)) errors.push(`${prefix} runtime font dependency is not allowed`);
+
+  const variant = svg.match(/\bdata-variant="([^"]+)"/i)?.[1];
+  const paint = svg.match(/\bstroke="(#[0-9A-Fa-f]{6})"/i)?.[1]?.toUpperCase();
+  const expectedPaint = variant === "color"
+    ? project?.ossAccent?.light
+    : variant === "monochrome"
+      ? VARIANT_COLORS.monochrome
+      : variant === "reversed"
+        ? VARIANT_COLORS.reversed
+        : undefined;
+  if (!variant || !expectedPaint) errors.push(`${prefix} invalid glyph variant`);
+  else if (paint !== expectedPaint.toUpperCase()) errors.push(`${prefix} invalid ${variant} paint`);
 
   const coordinates = geometryNumbers(svg);
   if (coordinates.some((coordinate) => coordinate < 4 || coordinate > 28)) {
