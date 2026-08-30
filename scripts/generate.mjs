@@ -7,6 +7,7 @@ import sharp from "sharp";
 import { createDeterministicZip, sha256 } from "../src/archive.mjs";
 import { buildProjectLockup } from "../src/assets.mjs";
 import { loadRegistry } from "../src/registry.mjs";
+import { Q_FRAME, ROUTE_CONTRACT, getRouteDefinition } from "../src/q-line.mjs";
 import { buildOutlinedLabel, buildSocialSvg } from "../src/social.mjs";
 import { buildGlyphSvg, resolveCanonicalProject } from "../src/svg.mjs";
 import { buildWordmark } from "../src/wordmark.mjs";
@@ -75,7 +76,7 @@ export async function generateProject(project, outputUrl) {
   if (!isPathInside(resolvedRoot, projectDir)) throw new RangeError("Project output must remain inside the output root");
   await rm(projectDir, { recursive: true, force: true });
   await mkdir(projectDir, { recursive: true });
-  for (const variant of ["color", "monochrome", "reversed"]) await write(join(projectDir, `glyph-${variant}.svg`), buildGlyphSvg(canonical, { variant }));
+  for (const variant of ["color", "dark", "monochrome", "reversed"]) await write(join(projectDir, `glyph-${variant}.svg`), buildGlyphSvg(canonical, { variant }));
   await write(join(projectDir, "favicon.svg"), buildGlyphSvg(canonical, { variant: "color" }));
   await write(join(projectDir, "wordmark.svg"), buildWordmark(canonical.name));
   await write(join(projectDir, "lockup.svg"), buildProjectLockup(canonical));
@@ -137,16 +138,28 @@ async function generatePortfolio(root, projects) {
   await renderSvg(svg, join(root, "og-portfolio.png"), 1200, 630);
 }
 
+function familyReviewSvg(projects) {
+  const cells = projects.map((project, index) => {
+    const x = 60 + (index % 4) * 385;
+    const y = 150 + Math.floor(index / 4) * 270;
+    return `<g data-review-project="${project.registryId}" transform="translate(${x} ${y})"><rect width="350" height="232" rx="16" fill="#14191D" stroke="#2A3339"/><g transform="translate(20 28) scale(4)">${glyphInner(project)}</g><g transform="translate(178 42)">${glyphInner(project)}</g><g transform="translate(235 50) scale(.5)">${glyphInner(project)}</g><g transform="translate(282 42)">${glyphInner(project, "monochrome")}</g><text x="20" y="190" fill="#F4F7F8" font-family="Arial, sans-serif" font-size="17" font-weight="700">${project.name}</text><text x="20" y="215" fill="#7E8B93" font-family="monospace" font-size="12">${project.registryId}</text></g>`;
+  }).join("");
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="DevsLab OSS Q-line family review"><rect width="1600" height="1000" fill="#0B0F12"/><text x="60" y="62" fill="#F4F7F8" font-family="Arial, sans-serif" font-size="34" font-weight="700">DevsLab OSS Q-line Family</text><text x="60" y="102" fill="#7E8B93" font-family="monospace" font-size="13">FIXED Q FRAME · PRODUCT ROUTES · v0.2.0</text><text x="80" y="136" fill="#7E8B93" font-family="monospace" font-size="11">128 PX</text><text x="238" y="136" fill="#7E8B93" font-family="monospace" font-size="11">32 PX</text><text x="295" y="136" fill="#7E8B93" font-family="monospace" font-size="11">16 PX</text><text x="342" y="136" fill="#7E8B93" font-family="monospace" font-size="11">MONOCHROME</text>${cells}</svg>\n`;
+}
+
 export async function generate(outputUrl = new URL("../dist/", import.meta.url)) {
   const root = assertOutputUrl(outputUrl);
   await rm(root, { recursive: true, force: true });
   await mkdir(root, { recursive: true });
   const projects = await loadRegistry(new URL("registry/oss-projects.json", ROOT));
   for (const project of projects) await generateProject(project, pathToFileURL(root));
-  await write(join(root, "index.json"), `${JSON.stringify({ version: 1, projects }, null, 2)}\n`);
+  const publicProjects = projects.map((project) => ({ ...project, route: getRouteDefinition(project.registryId) }));
+  const qLine = { version: 1, frame: Q_FRAME, route: { min: ROUTE_CONTRACT.min, max: ROUTE_CONTRACT.max, strokeWidth: ROUTE_CONTRACT.strokeWidth, maxPrimitives: ROUTE_CONTRACT.maxPrimitives, linecap: ROUTE_CONTRACT.linecap, linejoin: ROUTE_CONTRACT.linejoin } };
+  await write(join(root, "index.json"), `${JSON.stringify({ version: 1, qLine, projects: publicProjects }, null, 2)}\n`);
   await write(join(root, "tokens.css"), tokensCss());
   await write(join(root, "atmosphere.css"), atmosphereCss());
   await write(join(root, "atmosphere-usage.md"), atmosphereUsage());
+  await write(join(root, "q-line-family-review.svg"), familyReviewSvg(projects));
   await generatePortfolio(root, projects);
   const downloads = join(root, "downloads");
   await mkdir(downloads, { recursive: true });

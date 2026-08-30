@@ -1,5 +1,33 @@
 {
   "version": 1,
+  "qLine": {
+    "version": 1,
+    "frame": {
+      "viewBox": "0 0 32 32",
+      "rear": {
+        "x": 5,
+        "y": 5,
+        "width": 16,
+        "height": 16,
+        "radius": 2
+      },
+      "front": {
+        "x": 11,
+        "y": 11,
+        "width": 16,
+        "height": 16,
+        "radius": 2
+      }
+    },
+    "route": {
+      "min": 13,
+      "max": 25,
+      "strokeWidth": 1.8,
+      "maxPrimitives": 4,
+      "linecap": "round",
+      "linejoin": "round"
+    }
+  },
   "projects": [
     {
       "registryId": "O01",
@@ -37,6 +65,15 @@
       "accent": {
         "light": "#1D4ED8",
         "dark": "#8AACF8"
+      },
+      "route": {
+        "meaning": "measured rail with unequal stops",
+        "paths": [
+          "M13 16H25",
+          "M15 16V22",
+          "M19 16V19",
+          "M23 16V22"
+        ]
       }
     },
     {
@@ -74,6 +111,14 @@
       "accent": {
         "light": "#1B6B4A",
         "dark": "#6EE7B7"
+      },
+      "route": {
+        "meaning": "inbound path interrupted at a boundary",
+        "paths": [
+          "M13 18H17",
+          "M21 18H25",
+          "M19 14V22"
+        ]
       }
     },
     {
@@ -113,6 +158,14 @@
       "accent": {
         "light": "#1B6B4A",
         "dark": "#6EE7B7"
+      },
+      "route": {
+        "meaning": "inbound path interrupted at a boundary",
+        "paths": [
+          "M13 18H17",
+          "M21 18H25",
+          "M19 14V22"
+        ]
       }
     },
     {
@@ -151,6 +204,15 @@
       "accent": {
         "light": "#7C3AED",
         "dark": "#C4B5FD"
+      },
+      "route": {
+        "meaning": "grouped numeric positions crossed by a caret",
+        "paths": [
+          "M14 14V18",
+          "M19 14V18",
+          "M24 14V18",
+          "M19 20L22 23L25 20"
+        ]
       }
     },
     {
@@ -189,6 +251,13 @@
       "accent": {
         "light": "#B45309",
         "dark": "#FBBF24"
+      },
+      "route": {
+        "meaning": "correction path between input states",
+        "paths": [
+          "M13 15L18 20L25 13",
+          "M22 13H25V16"
+        ]
       }
     },
     {
@@ -227,6 +296,15 @@
       "accent": {
         "light": "#7E22CE",
         "dark": "#D8B4FE"
+      },
+      "route": {
+        "meaning": "three positions with one raised selection",
+        "paths": [
+          "M13 20H25",
+          "M14 18V22",
+          "M19 14V20",
+          "M24 18V22"
+        ]
       }
     },
     {
@@ -265,6 +343,14 @@
       "accent": {
         "light": "#0E7490",
         "dark": "#22D3EE"
+      },
+      "route": {
+        "meaning": "three candidate paths resolving to one output",
+        "paths": [
+          "M13 14L18 18",
+          "M13 18H18",
+          "M13 22L18 18H25"
+        ]
       }
     },
     {
@@ -303,6 +389,14 @@
       "accent": {
         "light": "#1D4ED8",
         "dark": "#8AACF8"
+      },
+      "route": {
+        "meaning": "bounded forward page step",
+        "paths": [
+          "M14 15H22",
+          "M19 13L23 16L19 19",
+          "M14 22H22"
+        ]
       }
     },
     {
@@ -340,6 +434,14 @@
       "accent": {
         "light": "#BE123C",
         "dark": "#FDA4AF"
+      },
+      "route": {
+        "meaning": "three event records entering one stack",
+        "paths": [
+          "M13 14H23",
+          "M13 18H25",
+          "M13 22H21"
+        ]
       }
     },
     {
@@ -378,6 +480,13 @@
       "accent": {
         "light": "#4D7C0F",
         "dark": "#BEF264"
+      },
+      "route": {
+        "meaning": "modular assembly cross",
+        "paths": [
+          "M19 13V23",
+          "M14 18H24"
+        ]
       }
     },
     {
@@ -415,6 +524,14 @@
       "accent": {
         "light": "#0F766E",
         "dark": "#5EEAD4"
+      },
+      "route": {
+        "meaning": "controlled bidirectional data transfer",
+        "paths": [
+          "M13 15H24",
+          "M21 13L24 15L21 17",
+          "M25 21H14"
+        ]
       }
     },
     {
@@ -464,6 +581,14 @@
       "accent": {
         "light": "#334155",
         "dark": "#CBD5E1"
+      },
+      "route": {
+        "meaning": "bracketed run path",
+        "paths": [
+          "M15 13V23",
+          "M23 13V23",
+          "M18 15L22 18L18 21Z"
+        ]
       }
     }
   ]

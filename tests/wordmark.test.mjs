@@ -24,6 +24,8 @@ test("builds project lockups with sibling and DevsLab endorsement behavior", asy
   const jsLockup = buildProjectLockup(jsGuard, { endorsement: true });
   const javaLockup = buildProjectLockup(javaGuard, { endorsement: false });
 
+  assert.match(jsLockup, /data-layer="q-frame"/);
+  assert.match(jsLockup, /data-layer="product-route"/);
   assert.match(jsLockup, /ssrf-guard-js/);
   assert.match(jsLockup, /data-runtime-layer="neutral"/);
   assert.match(jsLockup, /JavaScript implementation/);

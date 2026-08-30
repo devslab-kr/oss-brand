@@ -16,7 +16,9 @@ test("social SVGs use the approved OG and README canvases", async () => {
   assert.match(readme, /viewBox="0 0 1280 320"/);
   assert.match(og, /editor-ruler/);
   assert.match(og, /Open source by DevsLab/);
-  assert.match(og, /<g[^>]*stroke="#0E7490"/, "social marks preserve the approved OSS cyan stroke");
+  assert.match(og, new RegExp(`fill="${project.accent.dark}"`), "social marks preserve the registered rear plane");
+  assert.match(og, new RegExp(`fill="${project.accent.light}"`), "social marks preserve the registered front plane");
+  assert.match(og, /data-layer="product-route"[^>]*stroke="#FFFFFF"/, "social marks preserve the Q-line route");
   assert.doesNotMatch(og, /linearGradient|radialGradient/);
   assert.doesNotMatch(og, /<text\b|font-family/i, "social typography is outlined at build time");
   assert.doesNotMatch(readme, /<text\b|font-family/i, "README typography is outlined at build time");

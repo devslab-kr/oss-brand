@@ -1,5 +1,4 @@
-import { getGlyphDefinition } from "./glyphs.mjs";
-import { resolveCanonicalProject } from "./svg.mjs";
+import { buildGlyphSvg, resolveCanonicalProject } from "./svg.mjs";
 import { buildWordmark } from "./wordmark.mjs";
 
 function escapeAttribute(value) {
@@ -7,8 +6,9 @@ function escapeAttribute(value) {
 }
 
 function glyphGroup(project) {
-  const glyph = getGlyphDefinition(project.registryId);
-  return `<g transform="translate(4 8) scale(1)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${glyph.paths.map((d) => `<path d="${d}" />`).join("")}</g>`;
+  const source = buildGlyphSvg(project, { variant: "color" });
+  const groups = source.match(/<g\b[\s\S]*<\/g>(?=<\/svg>)/)?.[0] ?? "";
+  return `<g transform="translate(4 8)">${groups}</g>`;
 }
 
 function outlinedName(name, x, y) {

@@ -11,6 +11,9 @@ test("validates generated glyph SVGs as deterministic and safe", async () => {
     const { buildGlyphSvg } = await import("../src/svg.mjs");
     const svg = buildGlyphSvg(project, { variant: "color" });
     assert.deepEqual(validateSvg(`${project.id}.svg`, svg, project), [], project.id);
+    assert.match(svg, /<rect x="5" y="5" width="16" height="16" rx="2"/);
+    assert.match(svg, /<rect x="11" y="11" width="16" height="16" rx="2"/);
+    assert.match(svg, /stroke-width="1\.8"/);
   }
 });
 
@@ -22,7 +25,7 @@ test("rejects unsafe SVG constructs and invalid master geometry", () => {
     ["image.svg", '<svg viewBox="0 0 32 32"><image href="https:\/\/example.com\/x.png" /></svg>', /prohibited element: image/],
     ["link.svg", '<svg viewBox="0 0 32 32"><path href="https:\/\/example.com" /></svg>', /external resource/],
     ["bad-grid.svg", '<svg viewBox="0 0 24 24"><path stroke-width="2" /></svg>', /must use viewBox/],
-    ["bad-stroke.svg", '<svg viewBox="0 0 32 32"><path stroke-width="1" /></svg>', /must use a 2-unit/],
+    ["bad-stroke.svg", '<svg viewBox="0 0 32 32"><path stroke-width="1" /></svg>', /must use a 1.8-unit route/],
     ["linear.svg", '<svg viewBox="0 0 32 32"><linearGradient id="a" /></svg>', /prohibited gradient/],
     ["radial.svg", '<svg viewBox="0 0 32 32"><radialGradient id="a" /></svg>', /prohibited gradient/],
   ];
@@ -35,15 +38,17 @@ test("rejects unsafe SVG constructs and invalid master geometry", () => {
 test("binds generated project identity and variant paint to the registered project", async () => {
   const [project] = await loadRegistry(new URL("../registry/oss-projects.json", import.meta.url));
   const color = buildGlyphSvg(project, { variant: "color" });
+  const dark = buildGlyphSvg(project, { variant: "dark" });
   const monochrome = buildGlyphSvg(project, { variant: "monochrome" });
   const reversed = buildGlyphSvg(project, { variant: "reversed" });
 
   assert.deepEqual(validateSvg("color.svg", color, project), []);
+  assert.deepEqual(validateSvg("dark.svg", dark, project), []);
   assert.deepEqual(validateSvg("monochrome.svg", monochrome, project), []);
   assert.deepEqual(validateSvg("reversed.svg", reversed, project), []);
   assert.ok(validateSvg("wrong-project.svg", color.replace('data-oss-project="O01"', 'data-oss-project="O02"'), project)
     .some((error) => error.includes("must equal O01")));
-  assert.ok(validateSvg("wrong-color.svg", color.replace("#0E7490", "#FF0000"), project)
+  assert.ok(validateSvg("wrong-color.svg", color.replace(project.accent.dark, "#FF0000"), project)
     .some((error) => error.includes("invalid color paint")));
   assert.ok(validateSvg("wrong-mono.svg", monochrome.replace("#18181B", "#FFFFFF"), project)
     .some((error) => error.includes("invalid monochrome paint")));
@@ -62,7 +67,7 @@ test("rejects spoofed identity and prevents caller-controlled XML paint injectio
   assert.doesNotMatch(canonicalSvg, /onload|<script|bad\(/i);
   assert.ok(validateSvg("spoofed.svg", canonicalSvg, mismatchedIdentity)
     .some((error) => error.includes("does not match approved registry id")));
-  assert.ok(validateSvg("contract-paint.svg", canonicalSvg.replace("#0E7490", "#FF0000"), project)
+  assert.ok(validateSvg("contract-paint.svg", canonicalSvg.replace(project.accent.dark, "#FF0000"), project)
     .some((error) => error.includes("invalid color paint")));
   assert.ok(validateSvg("poisoned.svg", canonicalSvg, poisonedColor)
     .some((error) => error.includes("ossAccent does not match approved registry id O01")));
