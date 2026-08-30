@@ -43,3 +43,28 @@ test("complete lockups retain twelve non-confusable identities despite the share
 
   assert.equal(new Set(hashes).size, 12);
 });
+
+test("canonicalizes lockups and rejects spoofed names, colors, and runtime relationships", async () => {
+  const projects = await loadRegistry(new URL("../registry/oss-projects.json", import.meta.url));
+  const javaGuard = projects.find((project) => project.registryId === "O02");
+  const jsGuard = projects.find((project) => project.registryId === "O03");
+
+  assert.throws(
+    () => buildProjectLockup({ ...javaGuard, relationships: { runtime: "javascript" } }),
+    /Project relationships does not match approved registry id O02/,
+    "O02 cannot be given an O03 runtime attachment",
+  );
+  assert.throws(
+    () => buildProjectLockup({ ...jsGuard, relationships: { sharedGlyphWith: "O02" } }),
+    /Project relationships does not match approved registry id O03/,
+    "O03 cannot lose its runtime attachment",
+  );
+  assert.throws(
+    () => buildProjectLockup({ ...jsGuard, name: 'other" /><script>bad()</script>' }),
+    /Project name does not match approved registry id O03/,
+  );
+  assert.throws(
+    () => buildProjectLockup({ ...javaGuard, ossAccent: { ...javaGuard.ossAccent, light: "#FF0000" } }),
+    /Project ossAccent does not match approved registry id O02/,
+  );
+});

@@ -1,4 +1,5 @@
 import { getGlyphDefinition } from "./glyphs.mjs";
+import { resolveCanonicalProject } from "./svg.mjs";
 import { buildWordmark } from "./wordmark.mjs";
 
 function escapeAttribute(value) {
@@ -19,9 +20,9 @@ function outlinedName(name, x, y) {
 export { buildWordmark };
 
 export function buildProjectLockup(project, { endorsement = false } = {}) {
-  if (!project?.registryId || !project?.name) throw new TypeError("A registered OSS project is required");
-  const runtime = project.relationships?.runtime === "javascript";
-  const accessibleParts = [project.name, runtime ? "JavaScript implementation" : null, endorsement ? "Open source by DevsLab" : null]
+  const canonical = resolveCanonicalProject(project);
+  const runtime = canonical.relationships.runtime === "javascript";
+  const accessibleParts = [canonical.name, runtime ? "JavaScript implementation" : null, endorsement ? "Open source by DevsLab" : null]
     .filter(Boolean).join(", ");
   const endorsementGroup = endorsement
     ? `<g data-endorsement="Open source by DevsLab" aria-label="Open source by DevsLab"><path d="M48 39H202" stroke="currentColor" stroke-width="1" opacity=".35" />${outlinedName("Open source by DevsLab", 48, 40)}</g>`
@@ -30,5 +31,5 @@ export function buildProjectLockup(project, { endorsement = false } = {}) {
     ? `<g data-runtime-layer="neutral" data-runtime-label="JavaScript implementation" aria-label="JavaScript implementation"><path d="M48 8H77V20H48Z" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M56 12H69M64 10L69 12L64 14" fill="none" stroke="currentColor" stroke-width="1.5" /></g>`
     : "";
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" role="img" aria-label="${escapeAttribute(accessibleParts)}" data-oss-lockup="${escapeAttribute(project.registryId)}">${glyphGroup(project)}${outlinedName(project.name, 48, 18)}${runtimeGroup}${endorsementGroup}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" role="img" aria-label="${escapeAttribute(accessibleParts)}" data-oss-lockup="${canonical.registryId}">${glyphGroup(canonical)}${outlinedName(canonical.name, 48, 18)}${runtimeGroup}${endorsementGroup}</svg>`;
 }

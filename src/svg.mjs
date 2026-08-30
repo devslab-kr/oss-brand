@@ -1,5 +1,6 @@
 import { getGlyphDefinition } from "./glyphs.mjs";
 import { APPROVED_REGISTRY_CONTRACT } from "./registry-contract.mjs";
+import { isDeepStrictEqual } from "node:util";
 
 const VARIANT_COLORS = Object.freeze({
   monochrome: "#18181B",
@@ -18,6 +19,11 @@ export function resolveCanonicalProject(project) {
   if (!canonical) throw new RangeError(`Unknown approved OSS registry id: ${project.registryId ?? "missing"}`);
   if (project.id !== canonical.id) {
     throw new TypeError(`Project id ${project.id ?? "missing"} does not match approved registry id ${canonical.registryId}`);
+  }
+  for (const field of ["name", "ossAccent", "accent", "relationships"]) {
+    if (Object.hasOwn(project, field) && !isDeepStrictEqual(project[field], canonical[field])) {
+      throw new TypeError(`Project ${field} does not match approved registry id ${canonical.registryId}`);
+    }
   }
   return canonical;
 }

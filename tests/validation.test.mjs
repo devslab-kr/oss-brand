@@ -58,13 +58,14 @@ test("rejects spoofed identity and prevents caller-controlled XML paint injectio
   const canonicalSvg = buildGlyphSvg(project, { variant: "color" });
 
   assert.throws(() => buildGlyphSvg(mismatchedIdentity, { variant: "color" }), /does not match approved registry id/);
-  const output = buildGlyphSvg(poisonedColor, { variant: "color" });
-  assert.equal(output, canonicalSvg, "paint and text come only from the canonical contract");
-  assert.doesNotMatch(output, /onload|<script|bad\(/i);
+  assert.throws(() => buildGlyphSvg(poisonedColor, { variant: "color" }), /ossAccent does not match approved registry id O01/);
+  assert.doesNotMatch(canonicalSvg, /onload|<script|bad\(/i);
   assert.ok(validateSvg("spoofed.svg", canonicalSvg, mismatchedIdentity)
     .some((error) => error.includes("does not match approved registry id")));
-  assert.ok(validateSvg("contract-paint.svg", canonicalSvg.replace("#0E7490", "#FF0000"), poisonedColor)
+  assert.ok(validateSvg("contract-paint.svg", canonicalSvg.replace("#0E7490", "#FF0000"), project)
     .some((error) => error.includes("invalid color paint")));
+  assert.ok(validateSvg("poisoned.svg", canonicalSvg, poisonedColor)
+    .some((error) => error.includes("ossAccent does not match approved registry id O01")));
 });
 
 test("rejects glyph geometry outside the 4-unit safety margin", () => {
