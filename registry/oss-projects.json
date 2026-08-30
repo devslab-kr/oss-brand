@@ -1,0 +1,214 @@
+[
+  {
+    "registryId": "O01",
+    "id": "editor-ruler",
+    "name": "editor-ruler",
+    "artifact": { "coordinate": "@devslab/editor-ruler" },
+    "category": "editor-ui",
+    "links": {
+      "repository": "https://github.com/devslab-kr/editor-ruler",
+      "package": "https://www.npmjs.com/package/@devslab/editor-ruler",
+      "demo": "https://devslab-kr.github.io/editor-ruler/"
+    },
+    "relationships": { "role": "parent identity for editor adapters" },
+    "surfaces": { "readme": true, "github": true, "docs": false, "demo": true, "npm": true, "maven": false, "terminal": false, "extension": false },
+    "glyphConcept": "measured rail with a movable stop",
+    "status": "active",
+    "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
+    "accent": { "light": "#1D4ED8", "dark": "#8AACF8" }
+  },
+  {
+    "registryId": "O02",
+    "id": "ssrf-guard",
+    "name": "ssrf-guard",
+    "artifact": { "coordinate": "kr.devslab:ssrf-guard" },
+    "category": "security",
+    "links": {
+      "repository": "https://github.com/devslab-kr/ssrf-guard",
+      "package": "https://central.sonatype.com/artifact/kr.devslab/ssrf-guard"
+    },
+    "relationships": { "sharedGlyphWith": "O03" },
+    "surfaces": { "readme": true, "github": true, "docs": false, "demo": false, "npm": false, "maven": true, "terminal": false, "extension": false },
+    "glyphConcept": "protected boundary interrupting an inbound path",
+    "status": "active",
+    "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
+    "accent": { "light": "#1B6B4A", "dark": "#6EE7B7" }
+  },
+  {
+    "registryId": "O03",
+    "id": "ssrf-guard-js",
+    "name": "ssrf-guard-js",
+    "artifact": { "coordinate": "@devslab/ssrf-guard-js" },
+    "category": "security",
+    "links": {
+      "repository": "https://github.com/devslab-kr/ssrf-guard-js",
+      "package": "https://www.npmjs.com/package/@devslab/ssrf-guard-js",
+      "docs": "https://devslab-kr.github.io/ssrf-guard-js/"
+    },
+    "relationships": { "sharedGlyphWith": "O02", "runtime": "javascript" },
+    "surfaces": { "readme": true, "github": true, "docs": true, "demo": false, "npm": true, "maven": false, "terminal": false, "extension": false },
+    "glyphConcept": "O02 core plus a neutral runtime attachment in lockups, not inside the glyph",
+    "status": "active",
+    "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
+    "accent": { "light": "#1B6B4A", "dark": "#6EE7B7" }
+  },
+  {
+    "registryId": "O04",
+    "id": "numkey",
+    "name": "numkey",
+    "artifact": { "coordinate": "@devslab/numkey" },
+    "category": "input",
+    "links": {
+      "repository": "https://github.com/devslab-kr/numkey",
+      "package": "https://www.npmjs.com/package/@devslab/numkey",
+      "demo": "https://devslab-kr.github.io/numkey/"
+    },
+    "relationships": { "siblingWith": "O05" },
+    "surfaces": { "readme": true, "github": true, "docs": false, "demo": true, "npm": true, "maven": false, "terminal": false, "extension": false },
+    "glyphConcept": "stable caret crossing grouped numeric units",
+    "status": "active",
+    "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
+    "accent": { "light": "#7C3AED", "dark": "#C4B5FD" }
+  },
+  {
+    "registryId": "O05",
+    "id": "kokey",
+    "name": "kokey",
+    "artifact": { "coordinate": "@devslab/kokey" },
+    "category": "input",
+    "links": {
+      "repository": "https://github.com/devslab-kr/kokey",
+      "package": "https://www.npmjs.com/package/@devslab/kokey",
+      "demo": "https://devslab-kr.github.io/kokey/"
+    },
+    "relationships": { "siblingWith": "O04" },
+    "surfaces": { "readme": true, "github": true, "docs": false, "demo": true, "npm": true, "maven": false, "terminal": false, "extension": true },
+    "glyphConcept": "two key surfaces connected by a correction path",
+    "status": "active",
+    "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
+    "accent": { "light": "#B45309", "dark": "#FBBF24" }
+  },
+  {
+    "registryId": "O06",
+    "id": "vue-date-rail",
+    "name": "vue-date-rail",
+    "artifact": { "coordinate": "@devslab/vue-date-rail" },
+    "category": "vue-ui",
+    "links": {
+      "repository": "https://github.com/devslab-kr/vue-date-rail",
+      "package": "https://www.npmjs.com/package/@devslab/vue-date-rail",
+      "demo": "https://devslab-kr.github.io/vue-date-rail/"
+    },
+    "relationships": { "tokenBoundary": "consumer --vdr-* tokens remain independent" },
+    "surfaces": { "readme": true, "github": true, "docs": false, "demo": true, "npm": true, "maven": false, "terminal": false, "extension": false },
+    "glyphConcept": "three date cells on a horizontal rail with one selected position",
+    "status": "active",
+    "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
+    "accent": { "light": "#7E22CE", "dark": "#D8B4FE" }
+  },
+  {
+    "registryId": "O07",
+    "id": "locale-match",
+    "name": "locale-match",
+    "artifact": { "coordinate": "@devslab/locale-match" },
+    "category": "i18n",
+    "links": {
+      "repository": "https://github.com/devslab-kr/locale-match",
+      "package": "https://www.npmjs.com/package/@devslab/locale-match",
+      "demo": "https://devslab-kr.github.io/locale-match/"
+    },
+    "relationships": { "role": "independent locale utility" },
+    "surfaces": { "readme": true, "github": true, "docs": false, "demo": true, "npm": true, "maven": false, "terminal": false, "extension": false },
+    "glyphConcept": "multiple candidate paths resolving into one matched line",
+    "status": "active",
+    "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
+    "accent": { "light": "#0E7490", "dark": "#22D3EE" }
+  },
+  {
+    "registryId": "O08",
+    "id": "easy-paging",
+    "name": "easy-paging",
+    "artifact": { "coordinate": "kr.devslab:easy-paging-spring-boot-starter" },
+    "category": "pagination",
+    "links": {
+      "repository": "https://github.com/devslab-kr/easy-paging-spring-boot-starter",
+      "package": "https://central.sonatype.com/artifact/kr.devslab/easy-paging-spring-boot-starter",
+      "docs": "https://easy-paging.devslab.kr/"
+    },
+    "relationships": { "role": "independent backend library" },
+    "surfaces": { "readme": true, "github": true, "docs": true, "demo": false, "npm": false, "maven": true, "terminal": false, "extension": false },
+    "glyphConcept": "a page stack advanced by a bounded cursor",
+    "status": "active",
+    "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
+    "accent": { "light": "#1D4ED8", "dark": "#8AACF8" }
+  },
+  {
+    "registryId": "O09",
+    "id": "api-log",
+    "name": "api-log",
+    "artifact": { "coordinate": "kr.devslab:api-log-core" },
+    "category": "logging",
+    "links": {
+      "repository": "https://github.com/devslab-kr/api-log",
+      "package": "https://central.sonatype.com/artifact/kr.devslab/api-log-core"
+    },
+    "relationships": { "role": "independent backend library" },
+    "surfaces": { "readme": true, "github": true, "docs": false, "demo": false, "npm": false, "maven": true, "terminal": false, "extension": false },
+    "glyphConcept": "event lines entering a durable record stack",
+    "status": "active",
+    "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
+    "accent": { "light": "#BE123C", "dark": "#FDA4AF" }
+  },
+  {
+    "registryId": "O10",
+    "id": "devslab-kit",
+    "name": "devslab-kit",
+    "artifact": { "coordinate": "kr.devslab:devslab-kit-spring-boot-starter" },
+    "category": "platform-starter",
+    "links": {
+      "repository": "https://github.com/devslab-kr/devslab-kit",
+      "package": "https://central.sonatype.com/artifact/kr.devslab/devslab-kit-spring-boot-starter",
+      "docs": "https://devslab-kit.devslab.kr/"
+    },
+    "relationships": { "role": "independent backend platform" },
+    "surfaces": { "readme": true, "github": true, "docs": true, "demo": false, "npm": false, "maven": true, "terminal": false, "extension": false },
+    "glyphConcept": "modular blocks assembling into one platform frame",
+    "status": "active",
+    "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
+    "accent": { "light": "#4D7C0F", "dark": "#BEF264" }
+  },
+  {
+    "registryId": "O11",
+    "id": "datalinq",
+    "name": "DataLinq",
+    "artifact": { "coordinate": "kr.devslab:datalinq" },
+    "category": "data-migration",
+    "links": {
+      "repository": "https://github.com/devslab-kr/datalinq",
+      "releases": "https://github.com/devslab-kr/datalinq/releases/latest"
+    },
+    "relationships": { "role": "terminal application" },
+    "surfaces": { "readme": true, "github": true, "docs": false, "demo": false, "npm": false, "maven": false, "terminal": true, "extension": false },
+    "glyphConcept": "two data columns connected by a controlled transfer bridge",
+    "status": "active",
+    "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
+    "accent": { "light": "#0F766E", "dark": "#5EEAD4" }
+  },
+  {
+    "registryId": "O12",
+    "id": "devslab-examples",
+    "name": "devslab-examples",
+    "artifact": { "coordinate": "kr.devslab:devslab-examples" },
+    "category": "demos",
+    "links": {
+      "repository": "https://github.com/devslab-kr/devslab-examples",
+      "discussions": "https://github.com/devslab-kr/devslab-examples/discussions"
+    },
+    "relationships": { "collectionOf": ["O01", "O02", "O03", "O04", "O05", "O06", "O07", "O08", "O09", "O10", "O11"] },
+    "surfaces": { "readme": true, "github": true, "docs": false, "demo": false, "npm": false, "maven": false, "terminal": false, "extension": false },
+    "glyphConcept": "a bracketed run/play symbol representing a collection",
+    "status": "active",
+    "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
+    "accent": { "light": "#334155", "dark": "#CBD5E1" }
+  }
+]
