@@ -22,8 +22,8 @@
     "route": {
       "min": 13,
       "max": 25,
-      "strokeWidth": 1.8,
-      "maxPrimitives": 4,
+      "strokeWidth": 2.4,
+      "maxPrimitives": 3,
       "linecap": "round",
       "linejoin": "round"
     }
@@ -70,9 +70,8 @@
         "meaning": "measured rail with unequal stops",
         "paths": [
           "M13 16H25",
-          "M15 16V22",
-          "M19 16V19",
-          "M23 16V22"
+          "M16 16V22",
+          "M22 16V19"
         ]
       }
     },
@@ -116,8 +115,7 @@
         "meaning": "inbound path interrupted at a boundary",
         "paths": [
           "M13 18H17",
-          "M21 18H25",
-          "M19 14V22"
+          "M21 14V22"
         ]
       }
     },
@@ -163,8 +161,7 @@
         "meaning": "inbound path interrupted at a boundary",
         "paths": [
           "M13 18H17",
-          "M21 18H25",
-          "M19 14V22"
+          "M21 14V22"
         ]
       }
     },
@@ -194,7 +191,7 @@
         "terminal": false,
         "extension": false
       },
-      "glyphConcept": "stable caret crossing grouped numeric units",
+      "glyphConcept": "numeric stepper raising and lowering a value",
       "status": "active",
       "ossAccent": {
         "raw": "#06B6D4",
@@ -206,12 +203,10 @@
         "dark": "#C4B5FD"
       },
       "route": {
-        "meaning": "grouped numeric positions crossed by a caret",
+        "meaning": "numeric value stepped up and down",
         "paths": [
-          "M14 14V18",
-          "M19 14V18",
-          "M24 14V18",
-          "M19 20L22 23L25 20"
+          "M15 16L19 13L23 16",
+          "M15 20L19 23L23 20"
         ]
       }
     },
@@ -241,7 +236,7 @@
         "terminal": false,
         "extension": true
       },
-      "glyphConcept": "two key surfaces connected by a correction path",
+      "glyphConcept": "a completed correction stroke across key input",
       "status": "active",
       "ossAccent": {
         "raw": "#06B6D4",
@@ -253,10 +248,9 @@
         "dark": "#FBBF24"
       },
       "route": {
-        "meaning": "correction path between input states",
+        "meaning": "single confirmed correction stroke",
         "paths": [
-          "M13 15L18 20L25 13",
-          "M22 13H25V16"
+          "M14 19L18 23L25 14"
         ]
       }
     },
@@ -286,7 +280,7 @@
         "terminal": false,
         "extension": false
       },
-      "glyphConcept": "three date cells on a horizontal rail with one selected position",
+      "glyphConcept": "one selected position raised from a horizontal date rail",
       "status": "active",
       "ossAccent": {
         "raw": "#06B6D4",
@@ -298,12 +292,10 @@
         "dark": "#D8B4FE"
       },
       "route": {
-        "meaning": "three positions with one raised selection",
+        "meaning": "one raised selection on a date rail",
         "paths": [
-          "M13 20H25",
-          "M14 18V22",
-          "M19 14V20",
-          "M24 18V22"
+          "M13 22H25",
+          "M16 22V15H22V22"
         ]
       }
     },
@@ -345,11 +337,10 @@
         "dark": "#22D3EE"
       },
       "route": {
-        "meaning": "three candidate paths resolving to one output",
+        "meaning": "candidate paths resolving to one output",
         "paths": [
-          "M13 14L18 18",
-          "M13 18H18",
-          "M13 22L18 18H25"
+          "M13 14L18 18H25",
+          "M13 22L18 18"
         ]
       }
     },
@@ -379,7 +370,7 @@
         "terminal": false,
         "extension": false
       },
-      "glyphConcept": "a page stack advanced by a bounded cursor",
+      "glyphConcept": "repeated forward page steps",
       "status": "active",
       "ossAccent": {
         "raw": "#06B6D4",
@@ -391,11 +382,10 @@
         "dark": "#8AACF8"
       },
       "route": {
-        "meaning": "bounded forward page step",
+        "meaning": "repeated forward page steps",
         "paths": [
-          "M14 15H22",
-          "M19 13L23 16L19 19",
-          "M14 22H22"
+          "M15 14L19 18L15 22",
+          "M21 14L25 18L21 22"
         ]
       }
     },
@@ -484,8 +474,8 @@
       "route": {
         "meaning": "modular assembly cross",
         "paths": [
-          "M19 13V23",
-          "M14 18H24"
+          "M19 14V24",
+          "M14 19H24"
         ]
       }
     },
@@ -514,7 +504,7 @@
         "terminal": true,
         "extension": false
       },
-      "glyphConcept": "two data columns connected by a controlled transfer bridge",
+      "glyphConcept": "opposing transfer lanes between two data stores",
       "status": "active",
       "ossAccent": {
         "raw": "#06B6D4",
@@ -526,11 +516,10 @@
         "dark": "#5EEAD4"
       },
       "route": {
-        "meaning": "controlled bidirectional data transfer",
+        "meaning": "opposing transfer lanes",
         "paths": [
-          "M13 15H24",
-          "M21 13L24 15L21 17",
-          "M25 21H14"
+          "M13 15H25L22 13",
+          "M25 21H13L16 23"
         ]
       }
     },
@@ -571,7 +560,7 @@
         "terminal": false,
         "extension": false
       },
-      "glyphConcept": "a bracketed run/play symbol representing a collection",
+      "glyphConcept": "a forward run marker representing executable examples",
       "status": "active",
       "ossAccent": {
         "raw": "#06B6D4",
@@ -583,11 +572,9 @@
         "dark": "#CBD5E1"
       },
       "route": {
-        "meaning": "bracketed run path",
+        "meaning": "forward run marker",
         "paths": [
-          "M15 13V23",
-          "M23 13V23",
-          "M18 15L22 18L18 21Z"
+          "M16 14L24 19L16 24Z"
         ]
       }
     }

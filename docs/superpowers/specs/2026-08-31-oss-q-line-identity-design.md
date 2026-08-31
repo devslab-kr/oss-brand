@@ -30,8 +30,8 @@ The master canvas is `0 0 32 32`.
 Each project owns one route definition rendered over the Q frame.
 
 - Route coordinates stay within `x=13..25` and `y=13..23` on the 32-unit master.
-- Standard route stroke is `1.8` units with round caps and round joins.
-- A route uses at most four simple path primitives and at most three directional changes.
+- Standard route stroke is `2.4` units with round caps and round joins.
+- A route uses at most three simple path primitives and at most three directional changes; one or two primitives are the target (see the v0.3.0 route simplification spec).
 - Routes may use straight orthogonal or 45-degree diagonal segments. Curves, text, numerals, tiny dots, and enclosed micro-shapes are prohibited.
 - The route represents the primary product action, not its implementation language or framework.
 - The route must remain recognizable in the monochrome mark and in the dedicated 16-pixel rendering.
@@ -43,15 +43,15 @@ Initial action assignments:
 | --- | --- | --- |
 | O01 | editor-ruler | measured rail with unequal stops |
 | O02/O03 | ssrf-guard / ssrf-guard-js | inbound path interrupted at a boundary |
-| O04 | numkey | grouped numeric positions crossed by a caret |
-| O05 | kokey | correction path between input states |
-| O06 | vue-date-rail | three positions with one raised selection |
-| O07 | locale-match | three candidate paths resolving to one output |
-| O08 | easy-paging | bounded forward page step |
+| O04 | numkey | numeric value stepped up and down |
+| O05 | kokey | single confirmed correction stroke |
+| O06 | vue-date-rail | one raised selection on a date rail |
+| O07 | locale-match | candidate paths resolving to one output |
+| O08 | easy-paging | repeated forward page steps |
 | O09 | api-log | three event records entering one stack |
 | O10 | devslab-kit | modular assembly cross |
-| O11 | DataLinq | controlled bidirectional data transfer |
-| O12 | devslab-examples | bracketed run/play path |
+| O11 | DataLinq | opposing transfer lanes |
+| O12 | devslab-examples | forward run marker |
 
 ## Color allocation
 
