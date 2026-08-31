@@ -65,7 +65,7 @@
     },
     "relationships": { "siblingWith": "O05" },
     "surfaces": { "readme": true, "github": true, "docs": false, "demo": true, "npm": true, "maven": false, "terminal": false, "extension": false },
-    "glyphConcept": "stable caret crossing grouped numeric units",
+    "glyphConcept": "numeric stepper raising and lowering a value",
     "status": "active",
     "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
     "accent": { "light": "#7C3AED", "dark": "#C4B5FD" }
@@ -83,7 +83,7 @@
     },
     "relationships": { "siblingWith": "O04" },
     "surfaces": { "readme": true, "github": true, "docs": false, "demo": true, "npm": true, "maven": false, "terminal": false, "extension": true },
-    "glyphConcept": "two key surfaces connected by a correction path",
+    "glyphConcept": "a completed correction stroke across key input",
     "status": "active",
     "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
     "accent": { "light": "#B45309", "dark": "#FBBF24" }
@@ -101,7 +101,7 @@
     },
     "relationships": { "tokenBoundary": "consumer --vdr-* tokens remain independent" },
     "surfaces": { "readme": true, "github": true, "docs": false, "demo": true, "npm": true, "maven": false, "terminal": false, "extension": false },
-    "glyphConcept": "three date cells on a horizontal rail with one selected position",
+    "glyphConcept": "one selected position raised from a horizontal date rail",
     "status": "active",
     "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
     "accent": { "light": "#7E22CE", "dark": "#D8B4FE" }
@@ -137,7 +137,7 @@
     },
     "relationships": { "role": "independent backend library" },
     "surfaces": { "readme": true, "github": true, "docs": true, "demo": false, "npm": false, "maven": true, "terminal": false, "extension": false },
-    "glyphConcept": "a page stack advanced by a bounded cursor",
+    "glyphConcept": "repeated forward page steps",
     "status": "active",
     "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
     "accent": { "light": "#1D4ED8", "dark": "#8AACF8" }
@@ -189,7 +189,7 @@
     },
     "relationships": { "role": "terminal application" },
     "surfaces": { "readme": true, "github": true, "docs": false, "demo": false, "npm": false, "maven": false, "terminal": true, "extension": false },
-    "glyphConcept": "two data columns connected by a controlled transfer bridge",
+    "glyphConcept": "opposing transfer lanes between two data stores",
     "status": "active",
     "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
     "accent": { "light": "#0F766E", "dark": "#5EEAD4" }
@@ -206,7 +206,7 @@
     },
     "relationships": { "collectionOf": ["O01", "O02", "O03", "O04", "O05", "O06", "O07", "O08", "O09", "O10", "O11"] },
     "surfaces": { "readme": true, "github": true, "docs": false, "demo": false, "npm": false, "maven": false, "terminal": false, "extension": false },
-    "glyphConcept": "a bracketed run/play symbol representing a collection",
+    "glyphConcept": "a forward run marker representing executable examples",
     "status": "active",
     "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
     "accent": { "light": "#334155", "dark": "#CBD5E1" }

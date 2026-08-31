@@ -13,7 +13,7 @@ test("validates generated glyph SVGs as deterministic and safe", async () => {
     assert.deepEqual(validateSvg(`${project.id}.svg`, svg, project), [], project.id);
     assert.match(svg, /<rect x="5" y="5" width="16" height="16" rx="2"/);
     assert.match(svg, /<rect x="11" y="11" width="16" height="16" rx="2"/);
-    assert.match(svg, /stroke-width="1\.8"/);
+    assert.match(svg, /stroke-width="2\.4"/);
   }
 });
 
@@ -25,7 +25,7 @@ test("rejects unsafe SVG constructs and invalid master geometry", () => {
     ["image.svg", '<svg viewBox="0 0 32 32"><image href="https:\/\/example.com\/x.png" /></svg>', /prohibited element: image/],
     ["link.svg", '<svg viewBox="0 0 32 32"><path href="https:\/\/example.com" /></svg>', /external resource/],
     ["bad-grid.svg", '<svg viewBox="0 0 24 24"><path stroke-width="2" /></svg>', /must use viewBox/],
-    ["bad-stroke.svg", '<svg viewBox="0 0 32 32"><path stroke-width="1" /></svg>', /must use a 1.8-unit route/],
+    ["bad-stroke.svg", '<svg viewBox="0 0 32 32"><path stroke-width="1" /></svg>', /must use a 2.4-unit route/],
     ["linear.svg", '<svg viewBox="0 0 32 32"><linearGradient id="a" /></svg>', /prohibited gradient/],
     ["radial.svg", '<svg viewBox="0 0 32 32"><radialGradient id="a" /></svg>', /prohibited gradient/],
   ];

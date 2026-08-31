@@ -7,15 +7,15 @@ const approved = [
   ["O01", "editor-ruler", "@devslab/editor-ruler", "editor-ui", "measured rail with a movable stop"],
   ["O02", "ssrf-guard", "kr.devslab:ssrf-guard", "security", "protected boundary interrupting an inbound path"],
   ["O03", "ssrf-guard-js", "@devslab/ssrf-guard-js", "security", "O02 core plus a neutral runtime attachment in lockups, not inside the glyph"],
-  ["O04", "numkey", "@devslab/numkey", "input", "stable caret crossing grouped numeric units"],
-  ["O05", "kokey", "@devslab/kokey", "input", "two key surfaces connected by a correction path"],
-  ["O06", "vue-date-rail", "@devslab/vue-date-rail", "vue-ui", "three date cells on a horizontal rail with one selected position"],
+  ["O04", "numkey", "@devslab/numkey", "input", "numeric stepper raising and lowering a value"],
+  ["O05", "kokey", "@devslab/kokey", "input", "a completed correction stroke across key input"],
+  ["O06", "vue-date-rail", "@devslab/vue-date-rail", "vue-ui", "one selected position raised from a horizontal date rail"],
   ["O07", "locale-match", "@devslab/locale-match", "i18n", "multiple candidate paths resolving into one matched line"],
-  ["O08", "easy-paging", "kr.devslab:easy-paging-spring-boot-starter", "pagination", "a page stack advanced by a bounded cursor"],
+  ["O08", "easy-paging", "kr.devslab:easy-paging-spring-boot-starter", "pagination", "repeated forward page steps"],
   ["O09", "api-log", "kr.devslab:api-log-core", "logging", "event lines entering a durable record stack"],
   ["O10", "devslab-kit", "kr.devslab:devslab-kit-spring-boot-starter", "platform-starter", "modular blocks assembling into one platform frame"],
-  ["O11", "DataLinq", "kr.devslab:datalinq", "data-migration", "two data columns connected by a controlled transfer bridge"],
-  ["O12", "devslab-examples", "kr.devslab:devslab-examples", "demos", "a bracketed run/play symbol representing a collection"],
+  ["O11", "DataLinq", "kr.devslab:datalinq", "data-migration", "opposing transfer lanes between two data stores"],
+  ["O12", "devslab-examples", "kr.devslab:devslab-examples", "demos", "a forward run marker representing executable examples"],
 ];
 
 const ossAccent = { raw: "#06B6D4", light: "#0E7490", dark: "#22D3EE" };

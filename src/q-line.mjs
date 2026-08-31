@@ -26,8 +26,8 @@ function validatePath(path) {
 export const ROUTE_CONTRACT = deepFreeze({
   min: 13,
   max: 25,
-  strokeWidth: 1.8,
-  maxPrimitives: 4,
+  strokeWidth: 2.4,
+  maxPrimitives: 3,
   linecap: "round",
   linejoin: "round",
   validatePath,
@@ -35,22 +35,22 @@ export const ROUTE_CONTRACT = deepFreeze({
 
 const SECURITY_ROUTE = deepFreeze({
   meaning: "inbound path interrupted at a boundary",
-  paths: ["M13 18H17", "M21 18H25", "M19 14V22"],
+  paths: ["M13 18H17", "M21 14V22"],
 });
 
 const ROUTES = new Map([
-  ["O01", { meaning: "measured rail with unequal stops", paths: ["M13 16H25", "M15 16V22", "M19 16V19", "M23 16V22"] }],
+  ["O01", { meaning: "measured rail with unequal stops", paths: ["M13 16H25", "M16 16V22", "M22 16V19"] }],
   ["O02", SECURITY_ROUTE],
   ["O03", SECURITY_ROUTE],
-  ["O04", { meaning: "grouped numeric positions crossed by a caret", paths: ["M14 14V18", "M19 14V18", "M24 14V18", "M19 20L22 23L25 20"] }],
-  ["O05", { meaning: "correction path between input states", paths: ["M13 15L18 20L25 13", "M22 13H25V16"] }],
-  ["O06", { meaning: "three positions with one raised selection", paths: ["M13 20H25", "M14 18V22", "M19 14V20", "M24 18V22"] }],
-  ["O07", { meaning: "three candidate paths resolving to one output", paths: ["M13 14L18 18", "M13 18H18", "M13 22L18 18H25"] }],
-  ["O08", { meaning: "bounded forward page step", paths: ["M14 15H22", "M19 13L23 16L19 19", "M14 22H22"] }],
+  ["O04", { meaning: "numeric value stepped up and down", paths: ["M15 16L19 13L23 16", "M15 20L19 23L23 20"] }],
+  ["O05", { meaning: "single confirmed correction stroke", paths: ["M14 19L18 23L25 14"] }],
+  ["O06", { meaning: "one raised selection on a date rail", paths: ["M13 22H25", "M16 22V15H22V22"] }],
+  ["O07", { meaning: "candidate paths resolving to one output", paths: ["M13 14L18 18H25", "M13 22L18 18"] }],
+  ["O08", { meaning: "repeated forward page steps", paths: ["M15 14L19 18L15 22", "M21 14L25 18L21 22"] }],
   ["O09", { meaning: "three event records entering one stack", paths: ["M13 14H23", "M13 18H25", "M13 22H21"] }],
-  ["O10", { meaning: "modular assembly cross", paths: ["M19 13V23", "M14 18H24"] }],
-  ["O11", { meaning: "controlled bidirectional data transfer", paths: ["M13 15H24", "M21 13L24 15L21 17", "M25 21H14"] }],
-  ["O12", { meaning: "bracketed run path", paths: ["M15 13V23", "M23 13V23", "M18 15L22 18L18 21Z"] }],
+  ["O10", { meaning: "modular assembly cross", paths: ["M19 14V24", "M14 19H24"] }],
+  ["O11", { meaning: "opposing transfer lanes", paths: ["M13 15H25L22 13", "M25 21H13L16 23"] }],
+  ["O12", { meaning: "forward run marker", paths: ["M16 14L24 19L16 24Z"] }],
 ].map(([id, route]) => {
   const frozen = deepFreeze(route);
   if (frozen.paths.length > ROUTE_CONTRACT.maxPrimitives) throw new RangeError(`${id} has too many route primitives`);

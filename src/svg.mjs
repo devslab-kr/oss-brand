@@ -44,7 +44,7 @@ export function buildGlyphSvg(project, { variant = "color" } = {}) {
   const paths = glyph.paths.map((d) => `<path d="${d}" />`).join("");
   const rearStroke = paint.outline ? ` stroke="${paint.outline}" stroke-width="2"` : "";
   const frame = `<g data-layer="q-frame"><rect x="5" y="5" width="16" height="16" rx="2" fill="${paint.rear}"${rearStroke}/><rect x="11" y="11" width="16" height="16" rx="2" fill="${paint.front}"/></g>`;
-  const route = `<g data-layer="product-route" fill="none" stroke="${paint.route}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths}</g>`;
+  const route = `<g data-layer="product-route" fill="none" stroke="${paint.route}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${paths}</g>`;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${glyph.viewBox}" role="img" aria-labelledby="${titleId}" data-oss-project="${canonical.registryId}" data-variant="${variant}"><title id="${titleId}">${escapeAttribute(canonical.name)}</title>${frame}${route}</svg>`;
 }
@@ -74,7 +74,7 @@ export function validateSvg(fileName, svg, project) {
   if (typeof svg !== "string") return [`${prefix} SVG must be a string`];
   if (!/^<svg\b/i.test(svg)) errors.push(`${prefix} root element must be svg`);
   if (!/\bviewBox="0 0 32 32"/i.test(svg)) errors.push(`${prefix} must use viewBox \"0 0 32 32\"`);
-  if (!/data-layer="product-route"[^>]*\bstroke-width="1\.8"/i.test(svg)) errors.push(`${prefix} must use a 1.8-unit route`);
+  if (!/data-layer="product-route"[^>]*\bstroke-width="2\.4"/i.test(svg)) errors.push(`${prefix} must use a 2.4-unit route`);
   const emittedProject = svg.match(/\bdata-oss-project="([^"]+)"/i)?.[1];
   if (!emittedProject) errors.push(`${prefix} missing OSS project identity`);
   if (emittedProject && emittedProject !== canonical.registryId) {
@@ -97,7 +97,7 @@ export function validateSvg(fileName, svg, project) {
   if (expectedPaint) {
     const expectedRear = `<rect x="5" y="5" width="16" height="16" rx="2" fill="${expectedPaint.rear}"${expectedPaint.outline ? ` stroke="${expectedPaint.outline}" stroke-width="2"` : ""}/>`;
     const expectedFront = `<rect x="11" y="11" width="16" height="16" rx="2" fill="${expectedPaint.front}"/>`;
-    const expectedRoute = `data-layer="product-route" fill="none" stroke="${expectedPaint.route}" stroke-width="1.8"`;
+    const expectedRoute = `data-layer="product-route" fill="none" stroke="${expectedPaint.route}" stroke-width="2.4"`;
     if (!svg.includes(expectedRear) || !svg.includes(expectedFront) || !svg.includes(expectedRoute)) errors.push(`${prefix} invalid ${variant} paint`);
   }
 

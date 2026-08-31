@@ -16,13 +16,13 @@ test("Q-frame geometry is immutable across every OSS project", async () => {
     rear: { x: 5, y: 5, width: 16, height: 16, radius: 2 },
     front: { x: 11, y: 11, width: 16, height: 16, radius: 2 },
   });
-  assert.equal(ROUTE_CONTRACT.strokeWidth, 1.8);
+  assert.equal(ROUTE_CONTRACT.strokeWidth, 2.4);
 
   for (const project of projects) {
     const definition = getGlyphDefinition(project.registryId);
     assert.equal(definition.viewBox, "0 0 32 32", project.id);
     assert.deepEqual(definition.frame, Q_FRAME, project.id);
-    assert.equal(definition.strokeWidth, 1.8, project.id);
+    assert.equal(definition.strokeWidth, 2.4, project.id);
     assert.ok(definition.paths.length > 0, project.id);
   }
 });
@@ -54,7 +54,7 @@ test("every route stays inside the product-route safety area", () => {
 });
 
 test("ruler, numeric input, and date rail keep distinct route rhythms", () => {
-  assert.deepEqual(getRouteDefinition("O01").paths, ["M13 16H25", "M15 16V22", "M19 16V19", "M23 16V22"]);
-  assert.deepEqual(getRouteDefinition("O04").paths, ["M14 14V18", "M19 14V18", "M24 14V18", "M19 20L22 23L25 20"]);
-  assert.deepEqual(getRouteDefinition("O06").paths, ["M13 20H25", "M14 18V22", "M19 14V20", "M24 18V22"]);
+  assert.deepEqual(getRouteDefinition("O01").paths, ["M13 16H25", "M16 16V22", "M22 16V19"]);
+  assert.deepEqual(getRouteDefinition("O04").paths, ["M15 16L19 13L23 16", "M15 20L19 23L23 20"]);
+  assert.deepEqual(getRouteDefinition("O06").paths, ["M13 22H25", "M16 22V15H22V22"]);
 });
