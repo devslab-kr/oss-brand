@@ -1,5 +1,9 @@
 # DevsLab OSS Brand
 
+<!-- publisher:start -->
+Published by [데브스랩(DevsLab)](https://devslab.kr/).
+<!-- publisher:end -->
+
 Public, deterministic source assets for the DevsLab Open Source portfolio.
 The portfolio contains the immutable registry IDs O01–O12: editor-ruler,
 ssrf-guard, ssrf-guard-js, numkey, kokey, vue-date-rail, locale-match,
