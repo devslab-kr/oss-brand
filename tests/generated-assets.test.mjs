@@ -127,12 +127,12 @@ test("project output URLs preserve a POSIX directory path without appending a Wi
   assert.deepEqual(inputs, ["/tmp/oss-brand/editor-ruler"]);
 });
 
-test("portfolio generation creates twelve archives and the portable CSS contract", async () => {
+test("portfolio generation creates thirteen archives and the portable CSS contract", async () => {
   const root = await mkdtemp(join(tmpdir(), "oss-brand-portfolio-"));
   await generate(pathToFileURL(root));
   const index = JSON.parse(await readFile(join(root, "index.json"), "utf8"));
   const atmosphere = await readFile(join(root, "atmosphere.css"), "utf8");
-  assert.equal(index.projects.length, 12);
+  assert.equal(index.projects.length, 13);
   assert.match(atmosphere, /86% 22%/);
   assert.match(atmosphere, /pointer-events: none/);
   assert.match(atmosphere, /forced-colors/);

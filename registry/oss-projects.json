@@ -210,5 +210,43 @@
     "status": "active",
     "ossAccent": { "raw": "#06B6D4", "light": "#0E7490", "dark": "#22D3EE" },
     "accent": { "light": "#334155", "dark": "#CBD5E1" }
+  },
+  {
+    "registryId": "O13",
+    "id": "workspace",
+    "name": "Workspace",
+    "artifact": {
+      "coordinate": "@devslab/workspace"
+    },
+    "category": "workspace-tools",
+    "links": {
+      "repository": "https://github.com/devslab-kr/workspace",
+      "package": "https://www.npmjs.com/package/@devslab/workspace",
+      "docs": "https://devslab-kr.github.io/workspace/"
+    },
+    "relationships": {
+      "role": "workspace application shell and utilities"
+    },
+    "surfaces": {
+      "readme": true,
+      "github": true,
+      "docs": true,
+      "demo": false,
+      "npm": true,
+      "maven": false,
+      "terminal": false,
+      "extension": false
+    },
+    "glyphConcept": "connected workspace panes joined by one internal route",
+    "status": "active",
+    "ossAccent": {
+      "raw": "#06B6D4",
+      "light": "#0E7490",
+      "dark": "#22D3EE"
+    },
+    "accent": {
+      "light": "#1D4ED8",
+      "dark": "#93C5FD"
+    }
   }
 ]

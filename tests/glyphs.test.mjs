@@ -31,7 +31,7 @@ test("security implementations are the only approved shared Q-line route", async
   const projects = await loadRegistry(registryUrl);
   const signatures = projects.map((project) => routeSignature(getRouteDefinition(project.registryId)));
 
-  assert.equal(new Set(signatures).size, 11, "O02/O03 are the one approved shared-route exception");
+  assert.equal(new Set(signatures).size, 12, "O02/O03 are the one approved shared-route exception");
   assert.deepEqual(getRouteDefinition("O02"), getRouteDefinition("O03"));
 });
 
@@ -46,7 +46,7 @@ test("glyph variants are limited to approved accessible color roles", async () =
 });
 
 test("every route stays inside the product-route safety area", () => {
-  for (const id of Array.from({ length: 12 }, (_, index) => `O${String(index + 1).padStart(2, "0")}`)) {
+  for (const id of Array.from({ length: 13 }, (_, index) => `O${String(index + 1).padStart(2, "0")}`)) {
     const route = getRouteDefinition(id);
     assert.ok(route.paths.length <= ROUTE_CONTRACT.maxPrimitives, id);
     for (const path of route.paths) assert.doesNotThrow(() => ROUTE_CONTRACT.validatePath(path), `${id}: ${path}`);
@@ -57,4 +57,8 @@ test("ruler, numeric input, and date rail keep distinct route rhythms", () => {
   assert.deepEqual(getRouteDefinition("O01").paths, ["M13 16H25", "M16 16V22", "M22 16V19"]);
   assert.deepEqual(getRouteDefinition("O04").paths, ["M15 16L19 13L23 16", "M15 20L19 23L23 20"]);
   assert.deepEqual(getRouteDefinition("O06").paths, ["M13 22H25", "M16 22V15H22V22"]);
+});
+
+test("Workspace retains its approved two-pane route", () => {
+  assert.deepEqual(getRouteDefinition("O13").paths, ["M14 21V15H19V18H24V23H14", "M14 18H19"]);
 });

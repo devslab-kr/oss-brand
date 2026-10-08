@@ -5,9 +5,9 @@ Published by [데브스랩(DevsLab)](https://devslab.kr/).
 <!-- publisher:end -->
 
 Public, deterministic source assets for the DevsLab Open Source portfolio.
-The portfolio contains the immutable registry IDs O01–O12: editor-ruler,
+The portfolio contains the immutable registry IDs O01–O13: editor-ruler,
 ssrf-guard, ssrf-guard-js, numkey, kokey, vue-date-rail, locale-match,
-easy-paging, api-log, devslab-kit, DataLinq, and devslab-examples.
+easy-paging, api-log, devslab-kit, DataLinq, devslab-examples, and Workspace.
 
 DevsLab is the owner/endorsement layer. Version 0.2 uses the Linq family's
 offset-square geometry as a fixed Q frame, then adds a mandatory product route
@@ -45,7 +45,7 @@ rebuilds `dist/`; `npm test` runs the unit/integration tests; and `npm run
 check` regenerates assets, tests them, validates SVG/registry structure,
 compares independent generations, and performs a release dry-run.
 
-The canonical registry is `registry/oss-projects.json`. Its order and O01–O12
+The canonical registry is `registry/oss-projects.json`. Its order and O01–O13
 identifiers are immutable. Q geometry and routes are defined in
 `src/q-line.mjs` and exported in `dist/index.json`. Generated archives use
 fixed metadata and lexically ordered inputs so release artifacts are
@@ -65,7 +65,12 @@ See `dist/atmosphere.css` and `dist/atmosphere-usage.md` for portable markup.
 ## Versioning
 
 Git tags and GitHub Releases use `vMAJOR.MINOR.PATCH`. A release is created
-only after `npm run check` succeeds and includes twelve deterministic project
+only after `npm run check` succeeds and includes thirteen deterministic project
 ZIPs plus `SHA256SUMS.txt`, `index.json`, and the family review board. The
 release package is not published to npm. Version `v0.1.1` remains the rollback
 source for the pre-Q-line identity.
+
+Workspace is registered as O13 (`@devslab/workspace`) with light-surface blue
+`#1D4ED8` and dark-surface blue `#93C5FD`. Its two connected pane paths use
+the current v0.3 Q-line contract: a 2.4-unit route stroke and at most three
+primitives, within coordinates 13–25. Existing O01–O12 records remain fixed.

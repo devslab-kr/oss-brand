@@ -14,7 +14,7 @@ test("Q-line family review includes 128, 32, 16, and monochrome proofs", async (
   const review = await readFile(join(root, "q-line-family-review.svg"), "utf8");
 
   for (const label of ["128 PX", "32 PX", "16 PX", "MONOCHROME"]) assert.match(review, new RegExp(label));
-  for (const id of Array.from({ length: 12 }, (_, index) => `O${String(index + 1).padStart(2, "0")}`)) assert.match(review, new RegExp(`data-review-project="${id}"`));
+  for (const id of Array.from({ length: 13 }, (_, index) => `O${String(index + 1).padStart(2, "0")}`)) assert.match(review, new RegExp(`data-review-project="${id}"`));
 
   const index = JSON.parse(await readFile(join(root, "index.json"), "utf8"));
   assert.deepEqual(index.qLine.frame, {
@@ -28,6 +28,13 @@ test("Q-line family review includes 128, 32, 16, and monochrome proofs", async (
     const bytes = await readFile(join(root, project.id, "icons", "icon-16.png"));
     signatures.push([project.registryId, createHash("sha256").update(bytes).digest("hex")]);
   }
-  assert.equal(new Set(signatures.map(([, signature]) => signature)).size, 11);
+  assert.equal(new Set(signatures.map(([, signature]) => signature)).size, 12);
   assert.equal(signatures[1][1], signatures[2][1], "the SSRF runtime pair shares its 16px mark");
+});
+
+test("family review keeps the appended Workspace row inside its canvas", async () => {
+  const review = await readFile(new URL("../dist/q-line-family-review.svg", import.meta.url), "utf8");
+  const height = Number(review.match(/viewBox="0 0 1600 ([0-9]+)"/)[1]);
+  const workspaceY = Number(review.match(/data-review-project="O13" transform="translate\(60 ([0-9]+)\)"/)[1]);
+  assert.ok(workspaceY + 232 <= height);
 });

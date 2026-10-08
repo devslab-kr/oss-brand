@@ -32,7 +32,7 @@ const ids = projects.map((project) => project.id);
 const files = await readdir(downloads);
 const zips = files.filter((file) => file.endsWith(".zip")).sort();
 const expectedZips = ids.map((id) => `${id}.zip`).sort();
-if (zips.length !== 12 || JSON.stringify(zips) !== JSON.stringify(expectedZips)) fail("downloads must contain exactly the 12 registered project ZIPs");
+if (zips.length !== projects.length || JSON.stringify(zips) !== JSON.stringify(expectedZips)) fail(`downloads must contain exactly the ${projects.length} registered project ZIPs`);
 
 const checksums = new Map();
 for (const line of (await readFile(join(downloads, "SHA256SUMS.txt"), "utf8")).trim().split(/\r?\n/)) {
@@ -40,7 +40,7 @@ for (const line of (await readFile(join(downloads, "SHA256SUMS.txt"), "utf8")).t
   if (!match || checksums.has(match?.[2])) fail("SHA256SUMS.txt contains an invalid or duplicate entry");
   checksums.set(match[2], match[1]);
 }
-if (checksums.size !== 12 || [...checksums.keys()].sort().join("|") !== expectedZips.join("|")) fail("SHA256SUMS.txt must list exactly the 12 ZIPs");
+if (checksums.size !== projects.length || [...checksums.keys()].sort().join("|") !== expectedZips.join("|")) fail(`SHA256SUMS.txt must list exactly the ${projects.length} ZIPs`);
 
 for (const file of zips) {
   const archive = await readFile(join(downloads, file));
@@ -70,4 +70,4 @@ for (const file of zips) {
   }
 }
 
-console.log("Release dry-run passed: 12 project ZIPs, checksums, licenses, registry version, and safe paths verified");
+console.log(`Release dry-run passed: ${projects.length} project ZIPs, checksums, licenses, registry version, and safe paths verified`);

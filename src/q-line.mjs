@@ -51,6 +51,7 @@ const ROUTES = new Map([
   ["O10", { meaning: "modular assembly cross", paths: ["M19 14V24", "M14 19H24"] }],
   ["O11", { meaning: "opposing transfer lanes", paths: ["M13 15H25L22 13", "M25 21H13L16 23"] }],
   ["O12", { meaning: "forward run marker", paths: ["M16 14L24 19L16 24Z"] }],
+  ["O13", { meaning: "connected workspace panes joined by one internal route", paths: ["M14 21V15H19V18H24V23H14", "M14 18H19"] }],
 ].map(([id, route]) => {
   const frozen = deepFreeze(route);
   if (frozen.paths.length > ROUTE_CONTRACT.maxPrimitives) throw new RangeError(`${id} has too many route primitives`);

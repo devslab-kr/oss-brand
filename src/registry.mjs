@@ -139,7 +139,7 @@ export async function loadRegistry(url) {
 export function validateRegistry(projects) {
   const errors = [];
   if (!Array.isArray(projects)) return ["Registry must be an array"];
-  if (projects.length !== EXPECTED_REGISTRY_IDS.length) errors.push("Registry must contain exactly 12 projects");
+  if (projects.length !== EXPECTED_REGISTRY_IDS.length) errors.push(`Registry must contain exactly ${EXPECTED_REGISTRY_IDS.length} projects`);
 
   for (const [index, expectedRegistryId] of EXPECTED_REGISTRY_IDS.entries()) {
     if (projects[index]?.registryId !== expectedRegistryId) {
