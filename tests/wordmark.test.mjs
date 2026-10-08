@@ -35,7 +35,7 @@ test("builds project lockups with sibling and DevsLab endorsement behavior", asy
   assert.doesNotMatch(javaLockup, /Open source by DevsLab/);
 });
 
-test("complete lockups retain twelve non-confusable identities despite the shared security core", async () => {
+test("complete lockups retain thirteen non-confusable identities despite the shared security core", async () => {
   const projects = await loadRegistry(new URL("../registry/oss-projects.json", import.meta.url));
   const geometry = projects.map((project) => {
     const lockup = buildProjectLockup(project, { endorsement: false });
@@ -43,7 +43,7 @@ test("complete lockups retain twelve non-confusable identities despite the share
   });
   const hashes = geometry.map((paths) => createHash("sha256").update(paths).digest("hex"));
 
-  assert.equal(new Set(hashes).size, 12);
+  assert.equal(new Set(hashes).size, 13);
 });
 
 test("canonicalizes lockups and rejects spoofed names, colors, and runtime relationships", async () => {

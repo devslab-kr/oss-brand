@@ -30,7 +30,7 @@ for (const project of projects) {
 try {
   const index = JSON.parse(await readFile(join(dist, "index.json"), "utf8"));
   if (index.version !== 1) errors.push("dist/index.json must declare registry version 1");
-  if (!Array.isArray(index.projects) || index.projects.length !== 12) errors.push("dist/index.json must contain 12 projects");
+  if (!Array.isArray(index.projects) || index.projects.length !== projects.length) errors.push(`dist/index.json must contain ${projects.length} projects`);
 } catch (error) {
   errors.push(`dist/index.json is invalid: ${error.message}`);
 }
@@ -39,5 +39,5 @@ if (errors.length > 0) {
   for (const error of errors) console.error(`validation: ${error}`);
   process.exitCode = 1;
 } else {
-  console.log("Structural and security validation passed: 12 OSS projects");
+  console.log(`Structural and security validation passed: ${projects.length} OSS projects`);
 }

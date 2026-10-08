@@ -131,20 +131,21 @@ function atmosphereUsage() {
 async function generatePortfolio(root, projects) {
   const cells = projects.map((project, index) => {
     const x = 80 + (index % 4) * 280;
-    const y = 150 + Math.floor(index / 4) * 150;
+    const y = 150 + Math.floor(index / 4) * (440 / Math.ceil(projects.length / 4));
     return `<g transform="translate(${x} ${y}) scale(2.5)">${glyphInner(project)}</g>${buildOutlinedLabel(project.name, { x: x - 12, top: y + 78, height: 16, fill: "#D4D4D8" })}`;
   }).join("");
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630"><rect width="1200" height="630" fill="#18181B"/>${buildOutlinedLabel("DevsLab Open Source", { x: 72, top: 38, height: 42, fill: "#FAFAFA" })}${buildOutlinedLabel("O01-O12 - Open source by DevsLab", { x: 72, top: 96, height: 18, fill: "#22D3EE" })}${cells}</svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630"><rect width="1200" height="630" fill="#18181B"/>${buildOutlinedLabel("DevsLab Open Source", { x: 72, top: 38, height: 42, fill: "#FAFAFA" })}${buildOutlinedLabel(`O01-${projects.at(-1).registryId} - Open source by DevsLab`, { x: 72, top: 96, height: 18, fill: "#22D3EE" })}${cells}</svg>`;
   await renderSvg(svg, join(root, "og-portfolio.png"), 1200, 630);
 }
 
 function familyReviewSvg(projects) {
+  const height = Math.max(1000, 150 + Math.ceil(projects.length / 4) * 270);
   const cells = projects.map((project, index) => {
     const x = 60 + (index % 4) * 385;
     const y = 150 + Math.floor(index / 4) * 270;
     return `<g data-review-project="${project.registryId}" transform="translate(${x} ${y})"><rect width="350" height="232" rx="16" fill="#14191D" stroke="#2A3339"/><g transform="translate(20 28) scale(4)">${glyphInner(project)}</g><g transform="translate(178 42)">${glyphInner(project)}</g><g transform="translate(235 50) scale(.5)">${glyphInner(project)}</g><g transform="translate(282 42)">${glyphInner(project, "monochrome")}</g><text x="20" y="190" fill="#F4F7F8" font-family="Arial, sans-serif" font-size="17" font-weight="700">${project.name}</text><text x="20" y="215" fill="#7E8B93" font-family="monospace" font-size="12">${project.registryId}</text></g>`;
   }).join("");
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="DevsLab OSS Q-line family review"><rect width="1600" height="1000" fill="#0B0F12"/><text x="60" y="62" fill="#F4F7F8" font-family="Arial, sans-serif" font-size="34" font-weight="700">DevsLab OSS Q-line Family</text><text x="60" y="102" fill="#7E8B93" font-family="monospace" font-size="13">FIXED Q FRAME · PRODUCT ROUTES · v0.3.0</text><text x="80" y="136" fill="#7E8B93" font-family="monospace" font-size="11">128 PX</text><text x="238" y="136" fill="#7E8B93" font-family="monospace" font-size="11">32 PX</text><text x="295" y="136" fill="#7E8B93" font-family="monospace" font-size="11">16 PX</text><text x="342" y="136" fill="#7E8B93" font-family="monospace" font-size="11">MONOCHROME</text>${cells}</svg>\n`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 ${height}" role="img" aria-label="DevsLab OSS Q-line family review"><rect width="1600" height="${height}" fill="#0B0F12"/><text x="60" y="62" fill="#F4F7F8" font-family="Arial, sans-serif" font-size="34" font-weight="700">DevsLab OSS Q-line Family</text><text x="60" y="102" fill="#7E8B93" font-family="monospace" font-size="13">FIXED Q FRAME · PRODUCT ROUTES · v0.4.0</text><text x="80" y="136" fill="#7E8B93" font-family="monospace" font-size="11">128 PX</text><text x="238" y="136" fill="#7E8B93" font-family="monospace" font-size="11">32 PX</text><text x="295" y="136" fill="#7E8B93" font-family="monospace" font-size="11">16 PX</text><text x="342" y="136" fill="#7E8B93" font-family="monospace" font-size="11">MONOCHROME</text>${cells}</svg>\n`;
 }
 
 export async function generate(outputUrl = new URL("../dist/", import.meta.url)) {

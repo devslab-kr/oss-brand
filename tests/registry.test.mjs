@@ -16,6 +16,7 @@ const approved = [
   ["O10", "devslab-kit", "kr.devslab:devslab-kit-spring-boot-starter", "platform-starter", "modular blocks assembling into one platform frame"],
   ["O11", "DataLinq", "kr.devslab:datalinq", "data-migration", "opposing transfer lanes between two data stores"],
   ["O12", "devslab-examples", "kr.devslab:devslab-examples", "demos", "a forward run marker representing executable examples"],
+  ["O13", "Workspace", "@devslab/workspace", "workspace-tools", "connected workspace panes joined by one internal route"],
 ];
 
 const ossAccent = { raw: "#06B6D4", light: "#0E7490", dark: "#22D3EE" };
@@ -32,9 +33,10 @@ const approvedDetails = [
   ["O10", { links: { repository: "https://github.com/devslab-kr/devslab-kit", package: "https://central.sonatype.com/artifact/kr.devslab/devslab-kit-spring-boot-starter", docs: "https://devslab-kit.devslab.kr/" }, relationships: { role: "independent backend platform" }, surfaces: { readme: true, github: true, docs: true, demo: false, npm: false, maven: true, terminal: false, extension: false }, status: "active", ossAccent, accent: { light: "#4D7C0F", dark: "#BEF264" } }],
   ["O11", { links: { repository: "https://github.com/devslab-kr/datalinq", releases: "https://github.com/devslab-kr/datalinq/releases/latest" }, relationships: { role: "terminal application" }, surfaces: { readme: true, github: true, docs: false, demo: false, npm: false, maven: false, terminal: true, extension: false }, status: "active", ossAccent, accent: { light: "#0F766E", dark: "#5EEAD4" } }],
   ["O12", { links: { repository: "https://github.com/devslab-kr/devslab-examples", discussions: "https://github.com/devslab-kr/devslab-examples/discussions" }, relationships: { collectionOf: ["O01", "O02", "O03", "O04", "O05", "O06", "O07", "O08", "O09", "O10", "O11"] }, surfaces: { readme: true, github: true, docs: false, demo: false, npm: false, maven: false, terminal: false, extension: false }, status: "active", ossAccent, accent: { light: "#334155", dark: "#CBD5E1" } }],
+  ["O13", {"links":{"repository":"https://github.com/devslab-kr/workspace","package":"https://www.npmjs.com/package/@devslab/workspace","docs":"https://devslab-kr.github.io/workspace/"},"relationships":{"role":"workspace application shell and utilities"},"surfaces":{"readme":true,"github":true,"docs":true,"demo":false,"npm":true,"maven":false,"terminal":false,"extension":false},"status":"active","ossAccent":{"raw":"#06B6D4","light":"#0E7490","dark":"#22D3EE"},"accent":{"light":"#1D4ED8","dark":"#93C5FD"}}],
 ];
 
-test("loads exactly O01 through O12 in approved order", async () => {
+test("loads exactly O01 through O13 in approved order", async () => {
   const projects = await loadRegistry(new URL("../registry/oss-projects.json", import.meta.url));
 
   assert.deepEqual(
@@ -62,8 +64,8 @@ test("exposes immutable unique project and registry identifiers", async () => {
 
   assert.ok(Object.isFrozen(projects));
   assert.ok(projects.every(Object.isFrozen));
-  assert.equal(new Set(projects.map((project) => project.registryId)).size, 12);
-  assert.equal(new Set(projects.map((project) => project.id)).size, 12);
+  assert.equal(new Set(projects.map((project) => project.registryId)).size, 13);
+  assert.equal(new Set(projects.map((project) => project.id)).size, 13);
 });
 
 test("rejects malformed metadata, links, relationships, and surfaces", () => {
@@ -124,7 +126,7 @@ test("requires the complete ordered registry and relationship objects", () => {
     },
   ]);
 
-  assert.ok(errors.includes("Registry must contain exactly 12 projects"));
+  assert.ok(errors.includes("Registry must contain exactly 13 projects"));
   assert.ok(errors.includes("Registry order 1 must use O01, received O02"));
   assert.ok(errors.includes("Invalid relationships for valid-project"));
 });

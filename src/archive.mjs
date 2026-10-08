@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { strToU8, zipSync } from "fflate";
 
-const DOS_EPOCH = new Date("1980-01-01T00:00:00.000Z");
+const DOS_EPOCH = new Date(1980, 0, 1, 0, 0, 0);
 const SAFE_ARCHIVE_PATH = /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[A-Za-z0-9][A-Za-z0-9._/-]*$/;
 
 function toBytes(value) {
